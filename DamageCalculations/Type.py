@@ -1,11 +1,10 @@
 from enum import Enum
 class DamageType(Enum):
     physical = 1
-    magical = 2
+    holy = 2
+    dark = 3
+    elemental = 4
 
-class ElementType(Enum):
-    fire = 1
-    water = 2
-    ice = 3
-    wind = 4
-    earth = 5
+
+    
+
