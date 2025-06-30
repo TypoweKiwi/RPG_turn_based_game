@@ -24,15 +24,3 @@ class Player:
     
     def __str__(self):
         return f"Player {self.name} Hp: {self.health_points}/{self.max_hp}"
-    
-    def ability_1(self):
-        pass
-
-    def ability_2(self):
-        pass
-
-    def ability_3(self):
-        pass
-
-    def get_abilities(self):
-        pass

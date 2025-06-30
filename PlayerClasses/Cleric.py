@@ -1,23 +1,15 @@
-from PlayerClasses.Player import Player, DamageType
+from PlayerClasses.Player import Player
+from Skills.Skill import Skill
+from Skills.Skills_list import holy_smite_dict, heal_dict, prayer_dict
+from PlayerClasses.Basic_stats import cleric_stats_dict
 
 class Cleric(Player):
-    def ability_1(self, target): #holy smite
-        skill_damage = 5
-        damage = skill_damage*self.ability_power
-        target.take_hit(damage, DamageType.holy)
+    def __init__(self, name, basic_stat_dict=cleric_stats_dict):
+        super().__init__(name, basic_stat_dict)
 
-    def ability_2(self): #heal
-        self.health_points + 20
-
-    def ability_3(self, *targets): #Prayer
-        skill_damage = 3
-        damage = skill_damage*self.ability_power
-        for target in targets:
-            target.take_hit(damage, DamageType.holy)
-    
-    def get_abilities(self):
-        abilities_lst = [
-            ("Holy smite", self.ability_1)
-            ("Heal", self.ability_2)
-            ("Prayer", self.ability_3)
+        self.skills = [
+            Skill(holy_smite_dict),
+            Skill(heal_dict),
+            Skill(prayer_dict)
         ]
+    

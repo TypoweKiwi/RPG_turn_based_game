@@ -1,2 +1,4 @@
+from Game.Game import Game
 
-pass
+game = Game()
+game.create_new_game()

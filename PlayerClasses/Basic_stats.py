@@ -1,6 +1,6 @@
 from DamageCalculations.Type import DamageType
 
-Cleric_stats_dict = {
+cleric_stats_dict = {
     "max_hp": 80,
     "max_mp": 50,
     "attack_damage": 5,
@@ -10,7 +10,7 @@ Cleric_stats_dict = {
     }
 
 
-Barbarian_stats_dict = {
+barbarian_stats_dict = {
     "max_hp": 200,
     "max_mp": 0,
     "attack_damage": 20,
@@ -20,7 +20,7 @@ Barbarian_stats_dict = {
     }
 
 
-Figter_stats_dict = {
+figter_stats_dict = {
     "max_hp": 100,
     "max_mp": 30,
     "attack_damage": 15,
@@ -30,7 +30,7 @@ Figter_stats_dict = {
     }
 
 
-Wizard_stats_dict = {
+wizard_stats_dict = {
     "max_hp": 70,
     "max_mp": 70,
     "attack_damage": 5,
@@ -39,7 +39,7 @@ Wizard_stats_dict = {
     "resistance": {DamageType.physical: 5, DamageType.elemental: 20, DamageType.holy: 5, DamageType.dark: 20}
     }
 
-Rogue_stats_dict = {
+rogue_stats_dict = {
     "max_hp": 80,
     "max_mp": 30,
     "attack_damage": 10,
