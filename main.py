@@ -1,4 +1,7 @@
-from Game.Game import Game
+from Game.Game import Game, Game_state
 
 game = Game()
-game.create_new_game()
+while game.state == Game_state.idle:
+    game.create_new_game()
+    while game.state == Game_state.running:
+        pass
