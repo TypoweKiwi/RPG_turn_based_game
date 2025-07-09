@@ -1,6 +1,6 @@
 from PlayerClasses.Player import Player
 from Skills.Skill import Skill
-from Skills.Skills_list import holy_smite_dict, heal_dict, prayer_dict
+from Skills.Skills_list import holy_smite_dict, heal_dict, prayer_dict, basic_attack_dict
 from PlayerClasses.Basic_stats import cleric_stats_dict
 
 class Cleric(Player):
@@ -8,6 +8,7 @@ class Cleric(Player):
         super().__init__(name, basic_stat_dict)
 
         self.skills = [
+            Skill(basic_attack_dict),
             Skill(holy_smite_dict),
             Skill(heal_dict),
             Skill(prayer_dict)

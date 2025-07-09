@@ -13,14 +13,10 @@ class Player:
         self.critical_chance = basic_stat_dict["crit_chance"]
         self.ability_power = basic_stat_dict["ability_power"]
         self.resistance = basic_stat_dict["resistance"]
+        self.skills = []
 
-    def basic_attack(self, target):
-        ticket = random.random(0.01, 1)
-        damage = self.attack_damage *2 if self.critical_chance >= ticket else self.attack_damage
-        target.take_hit(damage, DamageType.physical)
-    
     def take_hit(self, damage, type):
         self.health_points -= reduce_dmg(damage, self.resistance[type])
     
     def __str__(self):
-        return f"Player {self.name} Hp: {self.health_points}/{self.max_hp}"
+        return f"{self.name} Hp: {self.health_points}/{self.max_hp}"
