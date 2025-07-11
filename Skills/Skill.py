@@ -5,6 +5,7 @@ class Skill():
         self.cost = skill_dict["cost"]
         self.desc = skill_dict["desc"]
         self.skill_type = skill_dict["skill_type"]
+        self.n_targets = skill_dict["n_targets"]
 
     def __str__(self):
-        return f"{self.name} MP cost {self.cost}"
+        return f"{self.name} | {self.skill_type.name} | {self.cost} MP"

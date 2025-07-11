@@ -1,14 +1,8 @@
 import random 
-from InquirerPy import inquirer
+from rich import console
 from Monster.Monsters import monsters
 from Skills.Skills_list import Skill_type
-
-def make_query(message, choices):
-    choice = inquirer.select(
-            message=message,
-            choices= choices,
-        ).execute()
-    return choice 
+from Game.Choices_func import make_query, choose_targets
 
 class Encounter:
     def __init__(self, desc):
@@ -33,23 +27,29 @@ class Hostile_encounter(Encounter):
             self.enemies_lst.append(monsters[monster_key]())
 
     def begin_encounter(self, player):
-        print(self.description)
+        print(self.description) #TODO descriptions
         while self.check_status(player):
             self.decision(player)
     
-    def decision(self, player): #TODO player status/monster attack
+    def decision(self, player): #TODO player status/monster attack / ability usages in difrent ability types
+        print(f"{player.name} turn")
         ability = make_query("Choose ability", player.skills)
+        damage_multiplayers = player.get_damage_multiplayers()
+        
         if ability.skill_type == Skill_type.SINGLE_TARGET:  
-            target = make_query("Which enemy you wish to attack?", self.enemies_lst)
-            ability.func(target, player.ability_power)
-        else: #TODO ability usages in difrent ability types
-            pass
-    
-    def check_status(self, player): #TODO safe encouner
+            target = make_query("Which enemy you wish to attack?", self.enemies_lst) #TODO mechanism of mana calcualtion and checking if enough
+            ability.func(damage_multiplayers, target)
+            player.mana_points -= ability.cost
+        elif ability.skill_type == Skill_type.AOE: 
+            targets = choose_targets(self.enemies_lst, ability.n_targets)
+            ability.func(damage_multiplayers, targets)
+            player.mana_points -= ability.cost
+
+    def check_status(self, player): 
         if player.health_points <= 0 or self.enemies_lst[0].health_points <= 0:
             return False
         else:
             return True
         
         
-        
+    #TODO safe encouner

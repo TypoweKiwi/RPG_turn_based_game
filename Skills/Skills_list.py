@@ -1,7 +1,7 @@
 from enum import Enum
 import Skills.Skills_func
 
-class Skill_type:
+class Skill_type(Enum):
     SINGLE_TARGET = 1
     AOE = 2
     SELF_CAST = 3
@@ -11,7 +11,8 @@ basic_attack_dict = {
     "func": Skills.Skills_func.basic_attack_func,
     "cost": 0,
     "desc": "Strike enemy with your weapon",
-    "skill_type": Skill_type.SINGLE_TARGET
+    "skill_type": Skill_type.SINGLE_TARGET,
+    "n_targets": 1
 }
 
 
@@ -20,7 +21,8 @@ holy_smite_dict = {
     "func": Skills.Skills_func.holy_smite_func,
     "cost": 30,
     "desc": "Smite single enemy with powerful holy thunder",
-    "skill_type": Skill_type.SINGLE_TARGET
+    "skill_type": Skill_type.SINGLE_TARGET,
+    "n_targets": 1
 }
 
 heal_dict = {
@@ -28,7 +30,8 @@ heal_dict = {
     "func": Skills.Skills_func.heal_func,
     "cost": 20,
     "desc": "Heal ability recovers player HP",
-    "skill_type": Skill_type.SELF_CAST
+    "skill_type": Skill_type.SELF_CAST,
+    "n_targets": 1
 }
 
 
@@ -37,6 +40,7 @@ prayer_dict = {
     "func": Skills.Skills_func.prayer_func,
     "cost": 40,
     "desc": "Pray for divine intervention on your enemies",
-    "skill_type": Skill_type.AOE
+    "skill_type": Skill_type.AOE,
+    "n_targets": 3
 }
 

@@ -4,7 +4,7 @@ from Skills.Skills_list import holy_smite_dict, heal_dict, prayer_dict, basic_at
 from PlayerClasses.Basic_stats import cleric_stats_dict
 
 class Cleric(Player):
-    def __init__(self, name, basic_stat_dict=cleric_stats_dict):
+    def __init__(self, name="Cleric", basic_stat_dict=cleric_stats_dict):
         super().__init__(name, basic_stat_dict)
 
         self.skills = [
