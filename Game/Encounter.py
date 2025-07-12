@@ -25,11 +25,12 @@ class Hostile_encounter(Encounter):
         for i in range(random.randint(1, self.max_enemies)):
             monster_key = random.choice(list(monsters.keys()))
             self.enemies_lst.append(monsters[monster_key]())
-
+        
     def begin_encounter(self, player):
         print(self.description) #TODO descriptions
         while self.check_status(player):
             self.decision(player)
+            self.monster_attack
     
     def decision(self, player): #TODO player status/monster attack / ability usages in difrent ability types
         print(f"{player.name} turn")
@@ -39,11 +40,15 @@ class Hostile_encounter(Encounter):
         if ability.skill_type == Skill_type.SINGLE_TARGET:  
             target = make_query("Which enemy you wish to attack?", self.enemies_lst) #TODO mechanism of mana calcualtion and checking if enough
             ability.func(damage_multiplayers, target)
-            player.mana_points -= ability.cost
         elif ability.skill_type == Skill_type.AOE: 
             targets = choose_targets(self.enemies_lst, ability.n_targets)
             ability.func(damage_multiplayers, targets)
-            player.mana_points -= ability.cost
+        elif ability.skill_type == Skill_type.SELF_CAST:
+            ability.func(damage_multiplayers, player)
+        player.mana_points -= ability.cost
+    
+    def monster_attack(self, player): #TODO Monster attack
+        pass
 
     def check_status(self, player): 
         if player.health_points <= 0 or self.enemies_lst[0].health_points <= 0:

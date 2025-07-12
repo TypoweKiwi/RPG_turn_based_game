@@ -18,7 +18,7 @@ def heal_func(stats_dict, target):
     heal_amount = 10
     target.health_points = min(target.max_hp, target.health_points + heal_amount)
 
-def prayer_func(stats_dict, *targets):
+def prayer_func(stats_dict, targets):
     skill_damage = 3
     ability_power = stats_dict["AP"]
     damage = skill_damage*ability_power

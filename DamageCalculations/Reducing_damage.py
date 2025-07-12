@@ -1,2 +1,2 @@
-def reduce_dmg(dmg, resist):
+def reduce_dmg(dmg, resist): #TODO Damage calculation improment
     return dmg * (resist/100)

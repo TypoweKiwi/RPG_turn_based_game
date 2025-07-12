@@ -15,7 +15,7 @@ class Game:
         self.map = None 
         self.state = Game_state.idle
 
-    def create_new_game(self):
+    def create_new_game(self): #TODO implementing team instead sigle player - probably self.players -> self.players -> def_move_a_step - > Encounter def decision modification
         choice = make_query("Chose your class:", [element for element in classes])
         print(f"Your class choice: {choice}")
 
