@@ -26,5 +26,22 @@ class Player:
         }
         return dict
     
+    def check_skills(self):
+        avalible_skills = []
+        for skill in self.skills:
+            if skill.cost < self.mana_points:
+                avalible_skills.append({
+                    "name": str(skill),
+                    "description": skill.desc,
+                    "value": skill,
+                })
+            else:
+                avalible_skills.append({
+                    "name": str(skill) + "(Not enough MP)",
+                    "description": skill.desc,
+                    "value": None
+                })
+        return avalible_skills
+
     def __str__(self):
         return f"{self.name} Hp: {self.health_points}/{self.max_hp}"

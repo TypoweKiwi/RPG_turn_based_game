@@ -25,16 +25,20 @@ class Hostile_encounter(Encounter):
         for i in range(random.randint(1, self.max_enemies)):
             monster_key = random.choice(list(monsters.keys()))
             self.enemies_lst.append(monsters[monster_key]())
-        
+
     def begin_encounter(self, player):
         print(self.description) #TODO descriptions
         while self.check_status(player):
             self.decision(player)
             self.monster_attack
     
-    def decision(self, player): #TODO player status/monster attack / ability usages in difrent ability types
+    def decision(self, player): #TODO player status
         print(f"{player.name} turn")
-        ability = make_query("Choose ability", player.skills)
+        skills = player.check_skills()
+        ability = make_query("Choose ability", skills)
+        while ability == None:
+            print("You do not have enought enough MP for this skill!")
+            ability = make_query("Choose ability", skills)
         damage_multiplayers = player.get_damage_multiplayers()
         
         if ability.skill_type == Skill_type.SINGLE_TARGET:  
