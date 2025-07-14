@@ -2,8 +2,8 @@ from DamageCalculations.Reducing_damage import reduce_dmg
 from DamageCalculations.Type import DamageType
 import random
 
-class Player:
-    def __init__(self, name, basic_stat_dict):
+class Player: #TODO move speed stat -> basic stats dict -> key "move_speed"
+    def __init__(self, name, basic_stat_dict, hostile = False):
         self.name = name
         self.max_hp = basic_stat_dict["max_hp"]
         self.health_points = basic_stat_dict["max_hp"]
@@ -12,8 +12,10 @@ class Player:
         self.attack_damage = basic_stat_dict["attack_damage"]
         self.critical_chance = basic_stat_dict["crit_chance"]
         self.ability_power = basic_stat_dict["ability_power"]
+        self.speed = basic_stat_dict["speed"]
         self.resistance = basic_stat_dict["resistance"]
         self.skills = []
+        self.hostile = hostile
 
     def take_hit(self, damage, type):
         self.health_points -= reduce_dmg(damage, self.resistance[type])

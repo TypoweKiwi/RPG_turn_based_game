@@ -1,6 +1,6 @@
 from DamageCalculations.Type import DamageType
 import random
-
+#TODO print(dmg) to inform how much dmg has been dealt
 def basic_attack_func(stats_dict, target):
     attack_damage = stats_dict["AD"]
     crit_chance = stats_dict["Crit"]
