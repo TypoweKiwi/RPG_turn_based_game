@@ -7,6 +7,6 @@ class Skeleton(Player):
     def __init__(self, name="Skeleton", basic_stat_dict=skeleton_stats_dict, hostile=True):
         super().__init__(name, basic_stat_dict, hostile)
 
-        self.skills = [
+        self.skills = [ #TODO skeleton skills
             Skill(basic_attack_dict)
             ]

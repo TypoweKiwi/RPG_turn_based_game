@@ -18,7 +18,9 @@ class Player: #TODO move speed stat -> basic stats dict -> key "move_speed"
         self.hostile = hostile
 
     def take_hit(self, damage, type):
-        self.health_points -= reduce_dmg(damage, self.resistance[type])
+        damage = reduce_dmg(damage, self.resistance[type])
+        print(f"{self.name} received {damage} points of damage")
+        self.health_points -= damage
 
     def get_damage_multiplayers(self):
         dict = {
@@ -31,7 +33,7 @@ class Player: #TODO move speed stat -> basic stats dict -> key "move_speed"
     def check_skills(self):
         avalible_skills = []
         for skill in self.skills:
-            if skill.cost < self.mana_points:
+            if skill.cost <= self.mana_points:
                 avalible_skills.append({
                     "name": str(skill),
                     "description": skill.desc,
