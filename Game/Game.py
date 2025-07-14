@@ -22,13 +22,13 @@ class Game:
             print(f"Your choice: {choice}")
             self.players.append(classes[choice]())
 
-        self.map = Map()
+        self.map = Map(players=self.players)
         self.state = Game_state.running
     
     def move_a_step(self): #TODO Chyba coś tutaj trzeba zrobić tak przeczuwam 
         self.map.take_step
         self.map.generate_encounter()
-        self.map.current_encounter.begin_encounter(self.players)
+        self.map.current_encounter.begin_encounter()
 
     def check_end(self):
         choice = make_query("Do you wish to play again?", ["yes", "No"])
