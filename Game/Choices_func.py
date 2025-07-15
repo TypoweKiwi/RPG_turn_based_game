@@ -7,6 +7,9 @@ def make_query(message, choices):
         ).execute()
     return choice 
 
+def show_message(message):
+    make_query(message, ["Confirm"])
+
 def choose_targets(enemies, n_targets):
     targets = []
     remaining_enemies = enemies[:]

@@ -18,7 +18,7 @@ class Map:
     def generate_encounter(self):
         if self.current_position not in self.safe_zone:
             self.encounter_type = Encounter_type.fight
-            self.current_encounter = HostileEncounter("descriedpsa", self.players, 1) #TODO adjusting to many encounters
+            self.current_encounter = HostileEncounter(self.players, 1) #TODO adjusting to many encounters
         else:
              self.encounter_type = Encounter_type.rest #TODO self.current encounter safe
     

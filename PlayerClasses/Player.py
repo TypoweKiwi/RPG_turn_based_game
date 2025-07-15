@@ -49,3 +49,6 @@ class Player: #TODO move speed stat -> basic stats dict -> key "move_speed"
 
     def __str__(self):
         return f"{self.name} Hp: {self.health_points}/{self.max_hp}"
+    
+    def __repr__(self):
+        return self.name

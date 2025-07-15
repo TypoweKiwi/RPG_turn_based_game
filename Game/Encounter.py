@@ -1,13 +1,14 @@
 import random 
+from Game.Encounter_desc import generate_encounter_desc
 from Monster.Monsters import monsters
 from Skills.Skills_list import Skill_type
-from Game.Choices_func import make_query, choose_targets
+from Game.Choices_func import make_query, choose_targets, show_message
 from collections import deque 
 import time
 
 class Encounter:
-    def __init__(self, desc, players):
-        self.description = desc
+    def __init__(self,  players, hostile):
+        self.description = generate_encounter_desc(hostile)
         self.players = players
 
     def begin_encounter(self):
@@ -18,28 +19,36 @@ class Encounter:
 
     def check_status(self):
         pass
+    
+    def generate_desc(self):
+        pass
 
 class HostileEncounter(Encounter): 
-    def __init__(self, desc, players, max_enemies):
-        super().__init__(desc, players)
+    def __init__(self, players, max_enemies):
+        super().__init__(players, hostile=True)
         self.max_enemies = max_enemies
         self.enemies_lst = []
         self.order_queue = deque()
         for i in range(random.randint(1, self.max_enemies)):
             monster_key = random.choice(list(monsters.keys()))
             self.enemies_lst.append(monsters[monster_key]())
+        
+        self.description += f"\nYour team encounter {self.enemies_lst}" #TODO better encounter status message
 
     def begin_encounter(self):  #TODO print player status
-        # print(self.description) #TODO descriptions
+        show_message(self.description)
         flag = 0
-        while flag==0: 
+        i = 1
+        while flag==0:
             self.calculate_turn_order()
+            print(f"\nRound {i}\nCurrent turn order {[(i+1, self.order_queue[i]) for i in range(len(self.order_queue))]}") #TODO better turn message
             while self.order_queue:
                 time.sleep(1)
                 self.execute_turn()
                 if self.check_combat_status(self.players):
                     flag = 1
                     break
+            i += 1
 
     def calculate_turn_order(self):
         self.order_queue.clear()
@@ -47,9 +56,10 @@ class HostileEncounter(Encounter):
         objects_sorted.sort(key=lambda x: x.speed)
         for obj in objects_sorted:
             self.order_queue.append(obj)
+        self.order_queue.reverse()
 
     def execute_turn(self):
-        obj = self.order_queue.pop()
+        obj = self.order_queue.popleft()
         print(f"\n{obj.name} turn")
         if obj.hostile:
             self.hostile_decision(obj) 
@@ -102,7 +112,7 @@ class HostileEncounter(Encounter):
             return True
         else:
             return False
-
+        
 
     class SafeEncounter(Encounter): #TODO safe encouner
         pass
