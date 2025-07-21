@@ -1,2 +1,3 @@
 def reduce_dmg(dmg, resist): #TODO Damage calculation improment
-    return dmg * (resist/100)
+    resist = min(95, resist)
+    return dmg * (1-resist/100)
