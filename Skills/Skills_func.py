@@ -17,6 +17,7 @@ def holy_smite_func(stats_dict, target):
 def heal_func(stats_dict, target):
     heal_amount = 10
     target.health_points = min(target.max_hp, target.health_points + heal_amount)
+    print(f"{target.name} was healed {heal_amount} HP")
 
 def prayer_func(stats_dict, targets):
     skill_damage = 3

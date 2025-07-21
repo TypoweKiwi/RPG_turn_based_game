@@ -85,9 +85,12 @@ class HostileEncounter(Encounter):
         elif ability.skill_type == Skill_type.SELF_CAST:
             target = player
             ability.func(damage_multiplayers, target)
+        elif ability.skill_type == Skill_type.TEAM_CAST:
+            target = make_query("On which team member you wish to cast ability?", self.players)
+            ability.func(damage_multiplayers, target)
 
         player.mana_points -= ability.cost
-        self.check_if_dead(target)
+        self.check_targets_status(target)
 
     def hostile_decision(self, monster): #TODO More advance monster attack - maybe based on simple ML model
         target = random.choice(self.players)

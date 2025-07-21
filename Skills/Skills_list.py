@@ -5,6 +5,7 @@ class Skill_type(Enum):
     SINGLE_TARGET = 1
     AOE = 2
     SELF_CAST = 3
+    TEAM_CAST = 4
 
 basic_attack_dict = {
     "name": "Basic attack",
@@ -30,7 +31,7 @@ heal_dict = {
     "func": Skills.Skills_func.heal_func,
     "cost": 20,
     "desc": "Heal ability recovers player HP.",
-    "skill_type": Skill_type.SELF_CAST,
+    "skill_type": Skill_type.TEAM_CAST,
     "n_targets": 1
 }
 
@@ -66,20 +67,19 @@ battle_cry_dict = {
     "name": "Battle cry",
     "func": Skills.Skills_func.battle_cry_func,
     "cost": 0,
-    "desc": "A powerful blow focused on a single enemy.",
+    "desc": "Unleash a thunderous roar that shakes the battlefield, damaging all nearby foes.",
     "skill_type": Skill_type.AOE,
     "n_targets": 4
 }
 
 knife_throw_dict = {
     "name": "Knife throw",
-    "func": Skills.Skills_func.heavy_strike,
+    "func": Skills.Skills_func.knife_throw_func,
     "cost": 0,
-    "desc": "A powerful blow focused on a single enemy.",
+    "desc": "Throw a deadly knife with precision, piercing the target's defenses",
     "skill_type": Skill_type.SINGLE_TARGET,
     "n_targets": 1
 }
-
 
 
 skill_list = [
