@@ -13,10 +13,8 @@ def show_message(message):
 def choose_targets(enemies, n_targets):
     targets = []
     remaining_enemies = enemies[:]
-    
     if n_targets > len(enemies):
         n_targets = len(enemies)
-
     for i in range(n_targets):
         target = make_query(f"Choose target {i+1}:", remaining_enemies)
         targets.append(target)

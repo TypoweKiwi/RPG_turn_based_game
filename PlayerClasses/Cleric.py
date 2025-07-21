@@ -8,7 +8,7 @@ class Cleric(Player):
         super().__init__(name, basic_stat_dict)
 
         self.skills = [
-            Skill(basic_attack_dict),
+            Skill(basic_attack_dict), 
             Skill(holy_smite_dict),
             Skill(heal_dict),
             Skill(prayer_dict)

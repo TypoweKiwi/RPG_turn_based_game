@@ -30,9 +30,6 @@ town = {
     "action": town_func
 }
 
-
-
-
 safe_encounter_places = [
     fountain_of_life,
     old_wizzard,

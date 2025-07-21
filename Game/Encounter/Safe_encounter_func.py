@@ -7,6 +7,7 @@ import random
 def fountain_of_life_func(players):
     heal_value = 50
     message = ""
+
     for player in players:
         player.health_points = min(player.max_hp, player.health_points+heal_value)
         message += f"\n{player.name} current HP value {player.health_points}"
@@ -14,7 +15,7 @@ def fountain_of_life_func(players):
     show_message(message=message)
 
 def old_wizzard_func(players):
-    skill_dict = random.choice(skill_list) #TODO changing skill dict to skill 
+    skill_dict = random.choice(skill_list) 
     print(f"\nThe wizzard offer you to teach you {skill_dict['name']}")
     choice = make_query(message=f"Do you wish to learn {skill_dict['name']}", choices=["Yes", "No"]) 
 
@@ -27,6 +28,7 @@ def old_wizzard_func(players):
 def mana_source_func(players):
     mana_value = 50
     message = ""
+
     for player in players:
         player.mana_points = min(player.max_mp, player.mana_points+mana_value)
         message += f"\n{player.name} current MP value {player.mana_points}"
@@ -36,6 +38,7 @@ def mana_source_func(players):
 def lost_adventurer_func(players):
     adventurer = random.choice(list(classes.keys()))
     print(f"\nYou've met {adventurer}.")
+    
     choice = make_query(message="Do you wish to recruit him to your team?", choices=["Yes", "No"])
     if choice == "Yes":
         team_size = len(players)

@@ -1,5 +1,6 @@
-from PlayerClasses.Cleric import Cleric
+from PlayerClasses import Cleric, Barbarian
 
 classes = {
-    "Cleric" : Cleric
+    "Cleric" : Cleric.Cleric,
+    "Barbarian": Barbarian.Barbarian
 }

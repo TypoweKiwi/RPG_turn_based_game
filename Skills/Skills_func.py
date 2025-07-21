@@ -24,5 +24,33 @@ def prayer_func(stats_dict, targets):
     damage = skill_damage*ability_power
     for target in targets:
         target.take_hit(damage, DamageType.holy)
-          
+
+def barbaric_charge_func(stats_dict, targets):
+    skill_damage = 3
+    attack_damage = stats_dict["AD"]
+    damage = skill_damage*attack_damage
+    for target in targets:
+        target.take_hit(damage, DamageType.physical)
+
+def heavy_strike_func(stats_dict, target):
+    skill_damage = 5
+    attack_damage = stats_dict["AD"]
+    damage = skill_damage*attack_damage
+    crit_chance = stats_dict["Crit"]
+    ticket = random.random()
+    damage = damage*2 if crit_chance >= ticket else attack_damage
+    target.take_hit(damage, DamageType.physical)
+
+def battle_cry_func(stats_dict, targets):
+    skill_damage = 4
+    attack_damage = stats_dict["AD"]
+    damage = skill_damage*attack_damage
+    for target in targets:
+        target.take_hit(damage, DamageType.dark)
+
+def knife_throw_func(stats_dict, target):
+    skill_damage = 4
+    attack_damage = stats_dict["AD"]
+    damage = skill_damage*attack_damage
+    target.take_hit(damage, DamageType.physical)
     
