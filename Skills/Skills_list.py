@@ -44,3 +44,8 @@ prayer_dict = {
     "n_targets": 3
 }
 
+skill_list = [
+    holy_smite_dict,
+    heal_dict,
+    prayer_dict
+]

@@ -1,8 +1,8 @@
 from DamageCalculations.Reducing_damage import reduce_dmg
-from DamageCalculations.Type import DamageType
-import random
+from Game.Choices_func import make_query
+from Skills.Skill import Skill
 
-class Player: #TODO move speed stat -> basic stats dict -> key "move_speed"
+class Player: 
     def __init__(self, name, basic_stat_dict, hostile = False):
         self.name = name
         self.max_hp = basic_stat_dict["max_hp"]
@@ -46,9 +46,17 @@ class Player: #TODO move speed stat -> basic stats dict -> key "move_speed"
                     "value": None
                 })
         return avalible_skills
+    
+    def learn_skill(self, skill_dict):
+        skill = make_query(message="Which skill you wish to replace?", choices=(self.skills[1:] + ["None"]))
+        if skill == "None":
+            print("You decided to not replace any skill.")
+        else:
+            skill_index = self.skills.index(skill)
+            self.skills[skill_index] = Skill(skill_dict=skill_dict)
 
     def __str__(self):
-        return f"{self.name} Hp: {self.health_points}/{self.max_hp}"
+        return self.name
     
     def __repr__(self):
         return self.name

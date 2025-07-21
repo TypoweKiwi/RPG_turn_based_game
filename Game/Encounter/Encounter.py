@@ -1,10 +1,11 @@
-import random 
-from Game.Encounter_desc import generate_encounter_desc
-from Monster.Monsters import monsters
-from Skills.Skills_list import Skill_type
+from Game.Encounter.Encounter_desc import generate_encounter_desc
+from Game.Encounter.Safe_encounter_dict import safe_encounter_places
 from Game.Choices_func import make_query, choose_targets, show_message
+from Skills.Skills_list import Skill_type
+from Monster.Monsters import monsters
 from collections import deque 
 import time
+import random 
 
 class Encounter:
     def __init__(self,  players, hostile):
@@ -45,7 +46,7 @@ class HostileEncounter(Encounter):
             while self.order_queue:
                 time.sleep(1)
                 self.execute_turn()
-                if self.check_combat_status(self.players):
+                if self.check_combat_status():
                     flag = 1
                     break
             i += 1
@@ -79,7 +80,7 @@ class HostileEncounter(Encounter):
             target = make_query("Which enemy you wish to attack?", self.enemies_lst) 
             ability.func(damage_multiplayers, target)
         elif ability.skill_type == Skill_type.AOE: 
-            targets = choose_targets(self.enemies_lst, ability.n_targets)
+            targets = choose_targets(self.enemies_lst, ability.n_targets) 
             ability.func(damage_multiplayers, targets)
         elif ability.skill_type == Skill_type.SELF_CAST:
             target = player
@@ -96,23 +97,38 @@ class HostileEncounter(Encounter):
 
         ability.func(damage_multiplayers, target)
         print(f"{monster.name} attacked {target.name} with {ability.name}!")
-        self.check_if_dead(target)
+        self.check_targets_status(target)
 
-    def check_if_dead(self, target):
+    def check_targets_status(self, targets):
+        if isinstance(targets, list):
+            for target in targets:
+               self.check_target_status(target)
+        else:
+            target = targets
+            self.check_target_status(target)
+            
+    def check_target_status(self, target):  
         if target.health_points <= 0:
             print(f"{target.name} died")
             self.enemies_lst.remove(target) if target.hostile else self.players.remove(target)
-
-    def check_combat_status(self, players):   
-        if not players:
-            print("You lost because your team died")
+            
+    def check_combat_status(self):   
+        if not self.players:
+            print("\nYou lost because your team died")
             return True
         elif not self.enemies_lst:
-            print("You won by defeating all opponents")
+            print("\nYou won by defeating all opponents")
             return True
         else:
             return False
         
 
-    class SafeEncounter(Encounter): #TODO safe encouner
-        pass
+class SafeEncounter(Encounter): #TODO safe encouner
+    def __init__(self, players):
+        super().__init__(players, hostile=False)
+        self.encounter_dict = random.choice(safe_encounter_places)
+        self.description += self.encounter_dict["desc"] 
+
+    def begin_encounter(self):
+        show_message(self.description)
+        self.encounter_dict["action"](self.players)
