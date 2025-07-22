@@ -1,4 +1,5 @@
 from PlayerClasses.Classes import classes
+from PlayerClasses.Player import Team
 from Game.Map import Map
 from enum import Enum
 from Game.Choices_func import make_query
@@ -11,17 +12,19 @@ class Game_state(Enum):
 
 class Game:
     def __init__(self):
-        self.players = []
+        self.players = None
         self.map = None 
         self.state = Game_state.idle
 
     def create_new_game(self): 
         n_team = make_query("Chose your team size: ", [1, 2, 3, 4])
+        team_name = input("Write your team name: ")
+        self.players = Team(name=team_name)
         for i in range(n_team):
             choice = make_query(f"Chose your {i+1} team member:", [element for element in classes])
             print(f"Your choice: {choice}")
-            self.players.append(classes[choice]())
-
+            self.players.add_player(classes[choice]())
+        
         self.map = Map(players=self.players)
         self.state = Game_state.running
     

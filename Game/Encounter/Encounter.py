@@ -1,6 +1,7 @@
 from Game.Encounter.Encounter_desc import generate_encounter_desc
 from Game.Encounter.Safe_encounter_dict import safe_encounter_places
 from Game.Choices_func import make_query, choose_targets, show_message
+from PlayerClasses.Player import Team
 from Skills.Skills_list import Skill_type
 from Monster.Monsters import monsters
 from collections import deque 
@@ -28,11 +29,11 @@ class HostileEncounter(Encounter):
     def __init__(self, players, max_enemies):
         super().__init__(players, hostile=True)
         self.max_enemies = max_enemies
-        self.enemies_lst = []
+        self.enemies_lst = Team(name="Enemies")
         self.order_queue = deque()
         for i in range(random.randint(1, self.max_enemies)):
             monster_key = random.choice(list(monsters.keys()))
-            self.enemies_lst.append(monsters[monster_key]())
+            self.enemies_lst.add_player(monsters[monster_key]())
         
         self.description += f"\nYour team encounter {self.enemies_lst}" #TODO better encounter status message
 

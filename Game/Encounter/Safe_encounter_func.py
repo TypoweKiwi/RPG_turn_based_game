@@ -1,6 +1,5 @@
 from Game.Choices_func import show_message, make_query
 from Skills.Skills_list import skill_list
-from Skills.Skill import Skill
 from PlayerClasses.Classes import classes
 import random
 
@@ -9,7 +8,7 @@ def fountain_of_life_func(players):
     message = ""
 
     for player in players:
-        player.health_points = min(player.max_hp, player.health_points+heal_value)
+        player.health_points = min(player.max_hp, player.health_points+heal_value) #TODO change min to some healing function
         message += f"\n{player.name} current HP value {player.health_points}"
     message = f"\nYour team was healed." + message
     show_message(message=message)
@@ -38,21 +37,9 @@ def mana_source_func(players):
 def lost_adventurer_func(players):
     adventurer = random.choice(list(classes.keys()))
     print(f"\nYou've met {adventurer}.")
-    
     choice = make_query(message="Do you wish to recruit him to your team?", choices=["Yes", "No"])
     if choice == "Yes":
-        team_size = len(players)
-        if team_size == 4:
-            choice = make_query(message=f"Your team is full. To accept a traveler into your party, you must tell one of your team members to leave. Do you wish to continue?", choices=["Yes", "No"])
-            if choice == "Yes":
-                member = make_query(message="Who do you wish do replace?", choices=players)
-                member_index = players.index(member)
-                print(f"You replaced {players[member_index].name} with {adventurer}")
-                players[member_index] = classes[adventurer]()
-            else:
-                return None
-        else:
-            players.append(classes[adventurer]())
+        players.add_player(adventurer)
     else:
         print("You decided to let adventurer walk away.")
     
