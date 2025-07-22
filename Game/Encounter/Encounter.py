@@ -71,7 +71,7 @@ class HostileEncounter(Encounter):
         skills = player.check_skills()
         ability = make_query("Choose ability", skills)
         while ability == None:
-            print("You do not have enough MP for this skill!")
+            print(f"You do not have enough {ability.cost_type.value } for this skill!")
             ability = make_query("Choose ability", skills)
 
         damage_multiplayers = player.get_damage_multiplayers()
@@ -89,7 +89,7 @@ class HostileEncounter(Encounter):
             target = make_query("On which team member you wish to cast ability?", self.players)
             ability.func(damage_multiplayers, target)
 
-        player.mana_points -= ability.cost
+        player.apply_skill_cost(ability)
         self.check_targets_status(target)
 
     def hostile_decision(self, monster): #TODO More advance monster attack - maybe based on simple ML model
