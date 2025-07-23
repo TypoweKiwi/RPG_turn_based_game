@@ -39,7 +39,9 @@ def lost_adventurer_func(players):
     print(f"\nYou've met {adventurer}.")
     choice = make_query(message="Do you wish to recruit him to your team?", choices=["Yes", "No"])
     if choice == "Yes":
-        players.add_player(adventurer)
+        accepted = players.add_player(adventurer)
+        if not accepted:
+            print("You decided to let adventurer walk away.")
     else:
         print("You decided to let adventurer walk away.")
     

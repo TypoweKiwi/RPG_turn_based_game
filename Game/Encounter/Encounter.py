@@ -1,7 +1,7 @@
 from Game.Encounter.Encounter_desc import generate_encounter_desc
 from Game.Encounter.Safe_encounter_dict import safe_encounter_places
 from Game.Choices_func import make_query, choose_targets, show_message
-from PlayerClasses.Player import Team
+from PlayerClasses.Team import Team
 from Skills.Skills_list import Skill_type
 from Monster.Monsters import monsters
 from collections import deque 
@@ -29,13 +29,13 @@ class HostileEncounter(Encounter):
     def __init__(self, players, max_enemies):
         super().__init__(players, hostile=True)
         self.max_enemies = max_enemies
-        self.enemies_lst = Team(name="Enemies")
+        self.enemies = Team(name="Enemies")
         self.order_queue = deque()
         for i in range(random.randint(1, self.max_enemies)):
             monster_key = random.choice(list(monsters.keys()))
-            self.enemies_lst.add_player(monsters[monster_key]())
+            self.enemies.add_player(monsters[monster_key]())
         
-        self.description += f"\nYour team encounter {self.enemies_lst}" #TODO better encounter status message
+        self.description += f"\nYour team encounter {self.enemies.get_team_members()}" #TODO better encounter status message
 
     def begin_encounter(self):  #TODO print player status
         show_message(self.description)
@@ -54,7 +54,7 @@ class HostileEncounter(Encounter):
 
     def calculate_turn_order(self):
         self.order_queue.clear()
-        objects_sorted = self.players + self.enemies_lst
+        objects_sorted = self.players + self.enemies
         objects_sorted.sort(key=lambda x: x.speed)
         for obj in objects_sorted:
             self.order_queue.append(obj)
@@ -78,11 +78,11 @@ class HostileEncounter(Encounter):
         damage_multiplayers = player.get_damage_multiplayers()
         
         if ability.skill_type == Skill_type.SINGLE_TARGET: 
-            target = make_query("Which enemy you wish to attack?", self.enemies_lst) 
+            target = make_query("Which enemy you wish to attack?", self.enemies) 
             ability.func(damage_multiplayers, target)
         elif ability.skill_type == Skill_type.AOE: 
-            targets = choose_targets(self.enemies_lst, ability.n_targets) 
-            ability.func(damage_multiplayers, targets)
+            target = choose_targets(self.enemies, ability.n_targets) 
+            ability.func(damage_multiplayers, target)
         elif ability.skill_type == Skill_type.SELF_CAST:
             target = player
             ability.func(damage_multiplayers, target)
@@ -99,8 +99,8 @@ class HostileEncounter(Encounter):
         ability = ability["value"]
         damage_multiplayers = monster.get_damage_multiplayers()
 
-        ability.func(damage_multiplayers, target)
         print(f"{monster.name} attacked {target.name} with {ability.name}!")
+        ability.func(damage_multiplayers, target)
         self.check_targets_status(target)
 
     def check_targets_status(self, targets):
@@ -114,13 +114,13 @@ class HostileEncounter(Encounter):
     def check_target_status(self, target):  
         if target.health_points <= 0:
             print(f"{target.name} died")
-            self.enemies_lst.remove(target) if target.hostile else self.players.remove(target)
+            self.enemies.remove_player(target) if target.hostile else self.players.remove_player(target)
             
     def check_combat_status(self):   
         if not self.players:
             print("\nYou lost because your team died")
             return True
-        elif not self.enemies_lst:
+        elif not self.enemies:
             print("\nYou won by defeating all opponents")
             return True
         else:

@@ -9,4 +9,4 @@ class Skill():
         self.n_targets = skill_dict["n_targets"]
 
     def __str__(self):
-        return f"{self.name} | {self.skill_type.name} | {self.cost} MP"
+        return f"{self.name} | {self.skill_type.name} | {self.cost} {self.cost_type.value}"
