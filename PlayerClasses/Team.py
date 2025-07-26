@@ -1,6 +1,7 @@
 from Game.Choices_func import make_query
 from PlayerClasses.Classes import classes
 from PlayerClasses.Player import Player
+from rich.panel import Panel
 
 class Team:
     def __init__(self, name="Team"):
@@ -41,6 +42,14 @@ class Team:
         else:
             raise TypeError("Only Player instances can be assigned.")
     
+    def player_stats_panel(self, resistance=False):
+        panel_lst = []
+        for player in self._players:
+            color = "red" if player.hostile else "green"
+            stats_str = player.get_resistance_str() if resistance else player.gets_stats_str()
+            panel_lst.append(Panel(stats_str, title=f"[{color}]{player.name}[/{color}]"))
+        return panel_lst
+
     def __len__(self):
         return len(self._players)
 

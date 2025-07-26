@@ -71,7 +71,35 @@ class Player:
         else:
             skill_index = self.skills.index(skill)
             self.skills[skill_index] = Skill(skill_dict=skill_dict)
+    
+    def gets_stats_str(self):
+        return (
+            f"[red]HP[/red]: {self.health_points}/{self.max_hp}\n"
+            f"[blue]MP[/blue]: {self.mana_points}/{self.max_mp}\n"
+            f"[yellow]ST[/yellow]: {self.stamina}/{self.max_stamina}\n"
+            f"[cyan]ATK[/cyan]: {self.attack_damage}\n"
+            f"[magenta]AP[/magenta]: {self.ability_power}\n"
+            f"[green]CRIT%[/green]: {self.critical_chance:.1f}%\n"
+            f"[white]SPD[/white]: {self.speed}\n"
+        )
 
+    def get_resistance_str(self):
+        color_dict = {
+            "physical": "red",
+            "elemental": "blue",
+            "holy": "bright_white",
+            "dark": "magenta"
+        }
+        resistances = ""
+        for type, val in self.resistance.items():
+            color = color_dict[(type.value.lower())]
+            resistances += f"\n[{color}]{type.value.upper()}[/]: {val}%"
+
+        return f"{resistances}"
+            
+    def get_skills_panel(self): #TODO
+        pass
+    
     def __str__(self):
         return self.name
     

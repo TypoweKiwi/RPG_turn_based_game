@@ -5,6 +5,8 @@ from PlayerClasses.Team import Team
 from Skills.Skills_list import Skill_type
 from Monster.Monsters import monsters
 from collections import deque 
+from rich.columns import Columns
+from rich.console import Console
 import time
 import random 
 
@@ -37,7 +39,7 @@ class HostileEncounter(Encounter):
         
         self.description += f"\nYour team encounter {self.enemies.get_team_members()}" #TODO better encounter status message
 
-    def begin_encounter(self):  #TODO print player status
+    def begin_encounter(self):  
         show_message(self.description)
         flag = 0
         i = 1
@@ -69,6 +71,29 @@ class HostileEncounter(Encounter):
             self.player_decision(obj)
 
     def player_decision(self, player):
+        choices=[
+            {"name": f"Attack ({player.name} turn)", "value": self.player_attack},
+            {"name": "Show Stats", "value": self.show_stats},
+            {"name": "Show skills", "value": self.show_skills} #TODO self.show_skills
+        ]
+        decision = make_query(message="\nChoose your action", choices=choices)
+        decision(player)
+    
+    def show_stats(self, player):
+        resistance = make_query(message="\nWhich stats you wish to see?", choices=[{"name": "Vital Stats", "value": False}, {"name": "Resistance", "value": True}])
+        console = Console()
+        with console.screen(style="on black"):
+            player_panels = self.players.player_stats_panel(resistance=resistance)
+            enemy_panels = self.enemies.player_stats_panel(resistance=resistance)
+            all_panels = player_panels + enemy_panels
+            console.print(Columns(all_panels, expand=False, equal=False))
+            show_message("")
+        self.player_decision(player)
+    
+    def show_skills(self, player):
+        pass
+    
+    def player_attack(self, player):
         skills = player.check_skills()
         ability = make_query("Choose ability", skills)
         while ability == None:
@@ -92,6 +117,7 @@ class HostileEncounter(Encounter):
 
         player.apply_skill_cost(ability)
         self.check_targets_status(target)
+
 
     def hostile_decision(self, monster): #TODO More advance monster attack - maybe based on simple ML model
         target = random.choice(self.players)
