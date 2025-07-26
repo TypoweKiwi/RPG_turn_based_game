@@ -74,9 +74,9 @@ class Player:
     
     def gets_stats_str(self):
         return (
-            f"[red]HP[/red]: {self.health_points}/{self.max_hp}\n"
-            f"[blue]MP[/blue]: {self.mana_points}/{self.max_mp}\n"
-            f"[yellow]ST[/yellow]: {self.stamina}/{self.max_stamina}\n"
+            f"[red]HP[/red]: {self.health_points:.2f}/{self.max_hp}\n"
+            f"[blue]MP[/blue]: {self.mana_points:.2f}/{self.max_mp}\n"
+            f"[yellow]ST[/yellow]: {self.stamina:.2f}/{self.max_stamina}\n"
             f"[cyan]ATK[/cyan]: {self.attack_damage}\n"
             f"[magenta]AP[/magenta]: {self.ability_power}\n"
             f"[green]CRIT%[/green]: {self.critical_chance:.1f}%\n"

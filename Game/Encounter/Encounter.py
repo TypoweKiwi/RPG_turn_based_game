@@ -95,25 +95,27 @@ class HostileEncounter(Encounter):
     
     def player_attack(self, player):
         skills = player.check_skills()
-        ability = make_query("Choose ability", skills)
-        while ability == None:
-            print(f"You do not have enough {ability.cost_type.value } for this skill!")
+        skills.append({"name": "Back", "value": "BACK"})  
+
+        while True:
             ability = make_query("Choose ability", skills)
+            if ability == "BACK":
+                return self.player_decision(player)
+            elif ability is None:
+                print(f"You do not have enough resources to use this skill!")
+                continue
+            break
 
         damage_multiplayers = player.get_damage_multiplayers()
-        
         if ability.skill_type == Skill_type.SINGLE_TARGET: 
             target = make_query("Which enemy you wish to attack?", self.enemies) 
-            ability.func(damage_multiplayers, target)
         elif ability.skill_type == Skill_type.AOE: 
             target = choose_targets(self.enemies, ability.n_targets) 
-            ability.func(damage_multiplayers, target)
         elif ability.skill_type == Skill_type.SELF_CAST:
             target = player
-            ability.func(damage_multiplayers, target)
         elif ability.skill_type == Skill_type.TEAM_CAST:
             target = make_query("On which team member you wish to cast ability?", self.players)
-            ability.func(damage_multiplayers, target)
+        ability.func(damage_multiplayers, target)
 
         player.apply_skill_cost(ability)
         self.check_targets_status(target)
