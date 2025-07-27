@@ -74,7 +74,7 @@ class HostileEncounter(Encounter):
         choices=[
             {"name": f"Attack ({player.name} turn)", "value": self.player_attack},
             {"name": "Show Stats", "value": self.show_stats},
-            {"name": "Show skills", "value": self.show_skills} #TODO self.show_skills
+            {"name": "Show skills", "value": self.show_skills} 
         ]
         decision = make_query(message="\nChoose your action", choices=choices)
         decision(player)
@@ -90,8 +90,13 @@ class HostileEncounter(Encounter):
             show_message("")
         self.player_decision(player)
     
-    def show_skills(self, player):
-        pass
+    def show_skills(self, player): 
+        console = Console()
+        with console.screen(style="on black"):
+            skills_panels = player.get_skills_panel()
+            console.print(Columns(skills_panels, expand=False, equal=False))
+            show_message("")
+        self.player_decision(player)
     
     def player_attack(self, player):
         skills = player.check_skills()

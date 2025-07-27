@@ -1,5 +1,4 @@
-from PlayerClasses.Player import Player
-from Skills.Skill import Skill
+from PlayerClasses.Player import Player, Skill
 from Skills.Skills_list import basic_attack_dict, heavy_strike_dict, barbaric_charge_dict, battle_cry_dict
 from PlayerClasses.Basic_stats import barbarian_stats_dict
 

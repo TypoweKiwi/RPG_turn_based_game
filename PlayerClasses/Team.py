@@ -1,7 +1,5 @@
-from Game.Choices_func import make_query
 from PlayerClasses.Classes import classes
-from PlayerClasses.Player import Player
-from rich.panel import Panel
+from PlayerClasses.Player import Player, Panel, make_query
 
 class Team:
     def __init__(self, name="Team"):

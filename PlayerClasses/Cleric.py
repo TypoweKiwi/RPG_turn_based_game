@@ -1,5 +1,4 @@
-from PlayerClasses.Player import Player
-from Skills.Skill import Skill
+from PlayerClasses.Player import Player, Skill
 from Skills.Skills_list import holy_smite_dict, heal_dict, prayer_dict, basic_attack_dict
 from PlayerClasses.Basic_stats import cleric_stats_dict
 

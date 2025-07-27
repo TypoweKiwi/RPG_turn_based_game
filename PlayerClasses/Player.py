@@ -2,6 +2,7 @@ from DamageCalculations.Reducing_damage import reduce_dmg
 from Game.Choices_func import make_query
 from Skills.Skill import Skill
 from Skills.Skills_list import Skill_cost_type
+from rich.panel import Panel
 
 class Player: 
     def __init__(self, name, basic_stat_dict, hostile = False):
@@ -29,6 +30,9 @@ class Player:
         dict = {
             "AD": self.attack_damage,
             "AP": self.ability_power,
+            "HP": self.max_hp,
+            "MP": self.max_mp,
+            "SPD": self.speed,
             "Crit": self.critical_chance
         }
         return dict
@@ -97,8 +101,8 @@ class Player:
 
         return f"{resistances}"
             
-    def get_skills_panel(self): #TODO
-        pass
+    def get_skills_panel(self): 
+        return [Panel(skill.get_skill_str(), title=f"[magenta]{skill.name}[/magenta]") for skill in self.skills]
     
     def __str__(self):
         return self.name
