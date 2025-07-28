@@ -1,12 +1,9 @@
 from Game.Encounter.Encounter_desc import generate_encounter_desc
 from Game.Encounter.Safe_encounter_dict import safe_encounter_places
-from Game.Choices_func import make_query, choose_targets, show_message
+from Game.CombatUI import CombatUI, show_message
 from PlayerClasses.Team import Team
-from Skills.Skills_list import Skill_type
 from Monster.Monsters import monsters
 from collections import deque 
-from rich.columns import Columns
-from rich.console import Console
 import time
 import random 
 
@@ -38,6 +35,7 @@ class HostileEncounter(Encounter):
             self.enemies.add_player(monsters[monster_key]())
         
         self.description += f"\nYour team encounter {self.enemies.get_team_members()}" #TODO better encounter status message
+        self.UI = CombatUI(self.players, self.enemies)
 
     def begin_encounter(self):  
         show_message(self.description)
@@ -66,74 +64,25 @@ class HostileEncounter(Encounter):
         obj = self.order_queue.popleft()
         print(f"\n{obj.name} turn")
         if obj.hostile:
-            self.hostile_decision(obj) 
+            self.hostile_attack(obj) 
         else:
             self.player_decision(obj)
 
     def player_decision(self, player):
-        choices=[
-            {"name": f"Attack ({player.name} turn)", "value": self.player_attack},
-            {"name": "Show Stats", "value": self.show_stats},
-            {"name": "Show skills", "value": self.show_skills} 
-        ]
-        decision = make_query(message="\nChoose your action", choices=choices)
-        decision(player)
-    
-    def show_stats(self, player):
-        resistance = make_query(message="\nWhich stats you wish to see?", choices=[{"name": "Vital Stats", "value": False}, {"name": "Resistance", "value": True}])
-        console = Console()
-        with console.screen(style="on black"):
-            player_panels = self.players.player_stats_panel(resistance=resistance)
-            enemy_panels = self.enemies.player_stats_panel(resistance=resistance)
-            all_panels = player_panels + enemy_panels
-            console.print(Columns(all_panels, expand=False, equal=False))
-            show_message("")
-        self.player_decision(player)
-    
-    def show_skills(self, player): 
-        console = Console()
-        with console.screen(style="on black"):
-            skills_panels = player.get_skills_panel()
-            console.print(Columns(skills_panels, expand=False, equal=False))
-            show_message("")
-        self.player_decision(player)
-    
-    def player_attack(self, player):
-        skills = player.check_skills()
-        skills.append({"name": "Back", "value": "BACK"})  
-
-        while True:
-            ability = make_query("Choose ability", skills)
-            if ability == "BACK":
-                return self.player_decision(player)
-            elif ability is None:
-                print(f"You do not have enough resources to use this skill!")
-                continue
-            break
-
+        ability, target = self.UI.player_decision(player=player)
         damage_multiplayers = player.get_damage_multiplayers()
-        if ability.skill_type == Skill_type.SINGLE_TARGET: 
-            target = make_query("Which enemy you wish to attack?", self.enemies) 
-        elif ability.skill_type == Skill_type.AOE: 
-            target = choose_targets(self.enemies, ability.n_targets) 
-        elif ability.skill_type == Skill_type.SELF_CAST:
-            target = player
-        elif ability.skill_type == Skill_type.TEAM_CAST:
-            target = make_query("On which team member you wish to cast ability?", self.players)
-        ability.func(damage_multiplayers, target)
-
+        ability.use_skill(damage_multiplayers, target)
         player.apply_skill_cost(ability)
         self.check_targets_status(target)
 
-
-    def hostile_decision(self, monster): #TODO More advance monster attack - maybe based on simple ML model
+    def hostile_attack(self, monster): #TODO More advance monster attack - maybe based on simple ML model
         target = random.choice(self.players)
         ability = random.choice(monster.check_skills())
         ability = ability["value"]
         damage_multiplayers = monster.get_damage_multiplayers()
 
         print(f"{monster.name} attacked {target.name} with {ability.name}!")
-        ability.func(damage_multiplayers, target)
+        ability.use_skill(damage_multiplayers, target)
         self.check_targets_status(target)
 
     def check_targets_status(self, targets):

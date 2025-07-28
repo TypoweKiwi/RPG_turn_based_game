@@ -38,7 +38,6 @@ class Skill():
         dmg_color = dmg_colors[self.damage_type.name]
         scaling_str = f"{self.scaling['base']} × ({self.scaling['type']} x {self.scaling.get('factor', 1)})"
         targets_str = f"{self.n_targets} target{'s' if self.n_targets > 1 else ''}"
-
         return (
             f"[italic]{self.desc}[/italic]\n\n"
             f"[cyan]Cost:[/] [{cost_color}]{self.cost} {self.cost_type.value}[/]\n"
