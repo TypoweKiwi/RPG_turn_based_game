@@ -14,7 +14,7 @@ class Player:
         self.max_stamina = basic_stat_dict["max_stamina"]
         self.stamina = basic_stat_dict["max_stamina"]
         self.attack_damage = basic_stat_dict["attack_damage"]
-        self.critical_chance = basic_stat_dict["crit_chance"]
+        self.critical_chance = basic_stat_dict["critical_chance"]
         self.ability_power = basic_stat_dict["ability_power"]
         self.speed = basic_stat_dict["speed"]
         self.resistance = basic_stat_dict["resistance"]
@@ -22,7 +22,7 @@ class Player:
         self.hostile = hostile
 
     def take_hit(self, damage, type):
-        damage = reduce_dmg(damage, self.resistance[type])
+        damage = reduce_dmg(damage, self.resistance[type.name])
         print(f"{self.name} received {round(damage, 2)} points of damage")
         self.health_points -= damage
 
@@ -96,8 +96,8 @@ class Player:
         }
         resistances = ""
         for type, val in self.resistance.items():
-            color = color_dict[(type.value.lower())]
-            resistances += f"\n[{color}]{type.value.upper()}[/]: {val}%"
+            color = color_dict[(type.lower())]
+            resistances += f"\n[{color}]{type.upper()}[/]: {val}%"
 
         return f"{resistances}"
             

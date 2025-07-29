@@ -6,13 +6,13 @@ skeleton_stats_dict = {
     "max_stamina": 30,
     "attack_damage": 6,
     "ability_power": 0,
-    "crit_chance": 5,
+    "critical_chance": 5,
     "speed": 6,
     "resistance": {
-        DamageType.physical: 10,
-        DamageType.elemental: 5,
-        DamageType.holy: 0,
-        DamageType.dark: 20
+        DamageType.physical.name: 10,
+        DamageType.elemental.name: 5,
+        DamageType.holy.name: 0,
+        DamageType.dark.name: 20
     }
 }
 
@@ -22,13 +22,13 @@ armored_skeleton_stats_dict = {
     "max_stamina": 50,
     "attack_damage": 7,
     "ability_power": 0,
-    "crit_chance": 0,
+    "critical_chance": 0,
     "speed": 3,
     "resistance": {
-        DamageType.physical: 40,
-        DamageType.elemental: 10,
-        DamageType.holy: -10,
-        DamageType.dark: 30
+        DamageType.physical.name: 40,
+        DamageType.elemental.name: 10,
+        DamageType.holy.name: -10,
+        DamageType.dark.name: 30
     }
 }
 
@@ -38,12 +38,12 @@ skeleton_archer_stats_dict = {
     "max_stamina": 40,
     "attack_damage": 10,
     "ability_power": 0,
-    "crit_chance": 35,
+    "critical_chance": 35,
     "speed": 7,
     "resistance": {
-        DamageType.physical: 5,
-        DamageType.elemental: 0,
-        DamageType.holy: 0,
-        DamageType.dark: 15
+        DamageType.physical.name: 5,
+        DamageType.elemental.name: 0,
+        DamageType.holy.name: 0,
+        DamageType.dark.name: 15
     }
 }
