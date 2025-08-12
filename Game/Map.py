@@ -15,5 +15,8 @@ class Map:
         else:
             self.current_encounter = SafeEncounter(self.players)
     
+    def __eq__(self, other):
+        return isinstance(other, Map) and self.__dict__ == other.__dict__
+    
     def take_step(self):
         self.current_position += 1

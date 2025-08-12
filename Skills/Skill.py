@@ -48,5 +48,8 @@ class Skill():
             f"[cyan]Crit:[/] {'[green]Yes[/]' if self.crit else '[red]No[/]'}"
         )
 
+    def __eq__(self, other):
+        return isinstance(other, Skill) and self.__dict__ == other.__dict__
+    
     def __str__(self):
         return f"{self.name} | {self.skill_type.name} | {self.cost} {self.cost_type.value}"

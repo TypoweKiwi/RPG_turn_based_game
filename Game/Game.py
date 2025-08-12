@@ -3,7 +3,7 @@ from PlayerClasses.Team import Team
 from Game.Map import Map
 from enum import Enum
 from Game.Choices_func import make_query, show_message
-from Game.Saves import SavesFuncions
+from Game.Saves import Saves_game_func
 import datetime 
 import os
 
@@ -18,7 +18,6 @@ class Game:
         self.players = None
         self.map = None 
         self.state = Game_state.idle
-        self.save_path = os.path.join("Game", "Saves")
 
     def create_new_game(self): 
         n_team = make_query("Chose your team size: ", [1, 2, 3, 4])
@@ -32,10 +31,9 @@ class Game:
         self.map = Map(players=self.players)
         self.state = Game_state.running
     
-    def save_game_state(self): #TODO eleminate recursion ig stack issues occur 
+    def save_game_state(self): #TODO eleminate recursion if stack issues occur 
         save_name = "Team." + self.players.name + "." + datetime.datetime.now().strftime('%d-%m-%Y_%H-%M-%S') + ".txt"
-        save_path = os.path.join(self.save_path, save_name)
-        SavesFuncions.save_game(save_path, self.save_path, self.players, self.map)
+        Saves_game_func.save_game(save_name, self.players, self.map) #TODO save_path name collision 
         show_message("Game saved successfully.")
         self.step_menu()
 

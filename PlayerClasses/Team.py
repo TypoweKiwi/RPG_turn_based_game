@@ -47,6 +47,9 @@ class Team:
             stats_str = player.get_resistance_str() if resistance else player.gets_stats_str()
             panel_lst.append(Panel(stats_str, title=f"[{color}]{player.name}[/{color}]"))
         return panel_lst
+    
+    def __eq__(self, other):
+        return isinstance(other, Team) and self.__dict__ == other.__dict__
 
     def __len__(self):
         return len(self._players)

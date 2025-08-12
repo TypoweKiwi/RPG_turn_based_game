@@ -100,9 +100,17 @@ class Player:
             resistances += f"\n[{color}]{type.upper()}[/]: {val}%"
 
         return f"{resistances}"
+    
+    def update_from_dict(self, stats):
+        for key, value in stats.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
             
     def get_skills_panel(self): 
         return [Panel(skill.get_skill_str(), title=f"[magenta]{skill.name}[/magenta]") for skill in self.skills]
+    
+    def __eq__(self, other):
+        return isinstance(other, Player) and self.__dict__ == other.__dict__
     
     def __str__(self):
         return self.name
