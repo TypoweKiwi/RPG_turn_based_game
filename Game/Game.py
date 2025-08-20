@@ -3,9 +3,11 @@ from PlayerClasses.Team import Team
 from Game.Map import Map
 from enum import Enum
 from Game.Choices_func import make_query, show_message
-from Game.Saves import Saves_game_func
-import datetime 
-import os
+from Game.Saves.Saves_game_func import save_game, return_save_name, save_path
+from Game.Saves.Load_game_func import load_game
+import datetime
+import os 
+
 
 class Game_state(Enum):
     idle = 1
@@ -33,12 +35,17 @@ class Game:
     
     def save_game_state(self): #TODO eleminate recursion if stack issues occur 
         save_name = "Team." + self.players.name + "." + datetime.datetime.now().strftime('%d-%m-%Y_%H-%M-%S') + ".txt"
-        Saves_game_func.save_game(save_name, self.players, self.map) #TODO save_path name collision 
+        save_game(save_name, self.players, self.map) #TODO save_path name collision 
         show_message("Game saved successfully.")
         self.step_menu()
 
     def load_game_state(self):
-        pass
+        saves_lst = [{"name":return_save_name(save), "value":save} for save in os.listdir(save_path) if save.endswith(".txt")]
+        choice = make_query(message="Which save you wish to load?", choices=saves_lst)
+        self.map = load_game(save_name=choice)
+        self.players = map.players
+        show_message("Game loaded successfully.")
+    
 
     def step_menu(self):  #TODO some option after compliting encounter to rest
         choices = [
