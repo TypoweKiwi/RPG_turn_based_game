@@ -40,17 +40,37 @@ class Game:
         self.step_menu()
 
     def load_game_state(self):
-        saves_lst = [{"name":return_save_name(save), "value":save} for save in os.listdir(save_path) if save.endswith(".txt")]
+        saves_lst = [{"name": return_save_name(save), "value": save} for save in os.listdir(save_path) if save.endswith(".txt")]
+        saves_lst.append({"name": "Back", "value": None})
         choice = make_query(message="Which save you wish to load?", choices=saves_lst)
-        self.map = load_game(save_name=choice)
-        self.players = map.players
-        show_message("Game loaded successfully.")
+        if choice is None:
+            self.start_menu()
+        else: 
+            self.map = load_game(save_name=choice)
+            self.players = map.players
+            show_message("Game loaded successfully.")
+            self.state = Game_state.running
     
+    def start_menu(self): #TODO moving menu methods to additional game menu class
+        choices = [
+            {"name": "Start new game", "value": self.create_new_game},
+            {"name": "Load game", "value": self.load_game_state},
+            {"name": "Check rules", "value": None},
+            {"name": "Options", "value": None}
+        ]
 
-    def step_menu(self):  #TODO some option after compliting encounter to rest
+        choice = make_query(message="\nWelcome! \nChoose action: ", choices=choices)
+        if choice is None: #TODO after implementing check rules and options remove this condition
+            show_message("This option is still in progres")
+            self.start_menu()
+        else:
+            choice()
+
+    def step_menu(self):  
         choices = [
             {"name": "Take step", "value": lambda: None},
-            {"name": "Save game", "value": self.save_game_state}
+            {"name": "Save game", "value": self.save_game_state},
+            {"name": "Rest", "value": lambda: None}  #TODO Rest option
         ]
         make_query(message="\nChoose next action: ", choices=choices)()
 

@@ -3,7 +3,7 @@ from Game.Encounter.Encounter import HostileEncounter, SafeEncounter
 class Map:
     def __init__(self, max_steps=4, safe_zones=[3, 6, 9], players=None): #TODO max_steps increase
         self.max_steps = max_steps
-        self.current_position = 1
+        self.current_position = 0
         self.safe_zones = safe_zones
         self.players = players
         self.current_encounter = None
