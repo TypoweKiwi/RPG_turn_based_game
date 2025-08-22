@@ -2,6 +2,7 @@ from DamageCalculations.Reducing_damage import reduce_dmg
 from Game.Choices_func import make_query
 from Skills.Skill import Skill
 from Skills.Skills_list import Skill_cost_type
+from PlayerClasses.Inventory.Inventory import Inventory
 from rich.panel import Panel
 
 class Player: 
@@ -20,8 +21,12 @@ class Player:
         self.resistance = basic_stat_dict["resistance"]
         self.skills = []
         self.hostile = hostile
+        self.inventory = Inventory()
 
     def take_hit(self, damage, type):
+        '''
+        Funkcja take hit
+        '''
         damage = reduce_dmg(damage, self.resistance[type.name])
         print(f"{self.name} received {round(damage, 2)} points of damage")
         self.health_points -= damage
@@ -34,8 +39,9 @@ class Player:
             "MP": self.max_mp,
             "SPD": self.speed,
             "Crit": self.critical_chance
-        }
+        } 
         return dict
+    
     
     def get_skill_resources(self):
         dict = {

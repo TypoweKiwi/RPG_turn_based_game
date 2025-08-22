@@ -17,7 +17,7 @@ class Game_state(Enum):
 
 class Game:
     def __init__(self):
-        self.players = None
+        self.players = None #TODO check if there is point in keeping players in game class
         self.map = None 
         self.state = Game_state.idle
 
@@ -81,10 +81,12 @@ class Game:
     def take_step(self):
         self.map.take_step()
         self.begin_current_encounter()
-        self.step_menu()
+        self.check_state()
+        if self.state == Game_state.running:
+            self.step_menu()
 
     def check_state(self):
-        if self.map.current_position == self.map.max_steps:
+        if self.map.current_position == self.map.max_steps or self.players.get_team_members() == []:
             self.state = Game_state.idle
 
     def check_if_win(self):
