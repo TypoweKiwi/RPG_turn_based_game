@@ -1,10 +1,13 @@
 from PlayerClasses.Classes import classes
 from PlayerClasses.Player import Player, Panel, make_query
+from PlayerClasses.Inventory.Stash import Stash
 
 class Team:
     def __init__(self, name="Team"):
         self.name = name
         self._players = []
+        self.stash = Stash()
+        self.wallet = 0
 
     def add_player(self, player):
         if len(self._players) < 4:
@@ -47,6 +50,12 @@ class Team:
             stats_str = player.get_resistance_str() if resistance else player.gets_stats_str()
             panel_lst.append(Panel(stats_str, title=f"[{color}]{player.name}[/{color}]"))
         return panel_lst
+    
+    def add_gold(self, amount):
+        self.wallet += amount
+    
+    def remove_gold(self, amount):
+        self.wallet -= amount
     
     def __eq__(self, other):
         return isinstance(other, Team) and self.__dict__ == other.__dict__
