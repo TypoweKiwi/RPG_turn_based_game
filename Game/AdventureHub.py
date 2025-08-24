@@ -7,6 +7,9 @@ class AdventureHub:
         self.n_completed_adventures = 0
         self.hub_ui = HubUI()
     
+    def make_decision(self):
+        pass
+    
     def choose_adventure(self):
         pass
     
@@ -31,6 +34,9 @@ class AdventureHub:
     def recruit_adventurer(self):
         pass
 
+    def exit_hub(self):
+        return True
+
     def get_hub_options(self):
         choices = [
             {"name": "Start expedition", "value": self.start_adventure},
@@ -40,5 +46,6 @@ class AdventureHub:
             {"name": "Team recovery", "value": self.team_recovery},
             {"name": "Check team information", "value": self.check_team_info},
             {"name": "Recruit adventurer", "value": self.recruit_adventurer},
+            {"name": "Exit hub", "value": self.exit_hub}
         ]
         return choices

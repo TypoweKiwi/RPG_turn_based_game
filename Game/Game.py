@@ -20,20 +20,21 @@ class Game:
         self.players = None #TODO check if there is point in keeping players in game class
         self.adventure_hub = None 
         self.state = Game_state.idle
-
         self.menu_choices = [
             {"name": "Start new game", "value": self.create_new_game},
             {"name": "Load game", "value": self.load_game_state},
-            {"name": "Continue game", "value": self.continue_game, "disabled": "Available after starting the game"},
-            {"name": "Save game", "value": "save", self.save_game_state: "Available after starting the game"},
+            {"name": "Continue game - Unlocked after starting/loading game", "value": lambda: None},
+            {"name": "Save game - Unlocked after starting/loading game", "value":  lambda: None},
             {"name": "Check rules", "value": self.show_rules},
             {"name": "Exit game", "value": self.end_game}
         ]
     
     def unlock_menu_options(self):
-        for choice in self.menu_choices:
-            if choice["name"] in ("Continue game", "Save game"):
-                choice.pop("disabled", None)
+        self.menu_choices[2]["name"] = "Continue game"
+        self.self.menu_choices[2]["value"] = self.continue_game
+        
+        self.menu_choices[3]["name"] = "Save game"
+        self.self.menu_choices[3]["value"] = self.save_game_state
 
     def create_new_game(self): 
         team_name = input("Write your team name: ")
@@ -48,9 +49,9 @@ class Game:
         self.state = Game_state.running
         self.unlock_menu_options()
     
-    def save_game_state(self): #TODO eleminate recursion if stack issues occur 
+    def save_game_state(self): 
         save_name = "Team." + self.players.name + "." + datetime.datetime.now().strftime('%d-%m-%Y_%H-%M-%S') + ".txt"
-        save_game(save_name, self.players, self.map) #TODO save_path name collision 
+        save_game(save_name, self.players, self.map) 
         show_message("Game saved successfully.")
         self.step_menu()
 
