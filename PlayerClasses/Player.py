@@ -1,5 +1,5 @@
 from DamageCalculations.Reducing_damage import reduce_dmg
-from Game.Choices_func import make_query
+from Game.UI.Choices_func import make_query
 from Skills.Skill import Skill
 from Skills.Skills_list import Skill_cost_type
 from PlayerClasses.Inventory.Inventory import Inventory

@@ -1,6 +1,6 @@
 from Game.Encounter.Encounter_desc import generate_encounter_desc
 from Game.Encounter.Safe_encounter_dict import safe_encounter_places
-from Game.CombatUI import CombatUI, show_message
+from Game.UI.CombatUI import CombatUI, show_message
 from PlayerClasses.Team import Team
 from Monster.Monsters import monsters
 from collections import deque 

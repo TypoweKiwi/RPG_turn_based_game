@@ -1,4 +1,4 @@
-from Game.Choices_func import make_query
+from Game.UI.Choices_func import make_query
 from PlayerClasses.Inventory.items_list import ItemType
 
 class Inventory:

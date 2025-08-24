@@ -1,6 +1,6 @@
 import json
 import os
-from Game.Choices_func import make_query
+from Game.UI.Choices_func import make_query
 
 save_path = os.path.join("Game", "Saves")
 

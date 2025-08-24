@@ -1,4 +1,4 @@
-from Game.Choices_func import show_message, make_query
+from Game.UI.Choices_func import show_message, make_query
 from Skills.Skills_list import skill_list
 from PlayerClasses.Classes import classes
 import random

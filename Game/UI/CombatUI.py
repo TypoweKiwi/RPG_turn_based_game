@@ -1,4 +1,4 @@
-from Game.Choices_func import make_query, choose_targets, show_message
+from Game.UI.Choices_func import make_query, choose_targets, show_message
 from Skills.Skills_list import Skill_type
 from rich.columns import Columns
 from rich.console import Console
