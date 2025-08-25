@@ -29,13 +29,30 @@ class Game:
             {"name": "Exit game", "value": self.end_game}
         ]
     
-    def unlock_menu_options(self):
-        self.menu_choices[2]["name"] = "Continue game"
-        self.self.menu_choices[2]["value"] = self.continue_game
+    def change_menu_options(self, continue_name, continue_value, save_name, save_value):
+        self.menu_choices[2]["name"] = continue_name
+        self.menu_choices[2]["value"] = continue_value
         
-        self.menu_choices[3]["name"] = "Save game"
-        self.self.menu_choices[3]["value"] = self.save_game_state
+        self.menu_choices[3]["name"] = save_name
+        self.menu_choices[3]["value"] = save_value
 
+
+    def unlock_menu_options(self):
+        self.change_menu_options(
+            continue_name="Continue game",
+            continue_value=self.continue_game,
+            save_name="Save game",
+            save_value=self.save_game_state
+            )
+    
+    def lock_menu_options(self):
+        self.change_menu_options(
+            continue_name="Continue game - Unlocked after starting",
+            continue_value=lambda: None,
+            save_name="Save game - Unlocked after starting",
+            save_value=lambda: None
+            )
+    
     def create_new_game(self): 
         team_name = input("Write your team name: ")
         n_team = make_query("Chose your team size: ", [1, 2, 3, 4])
@@ -83,4 +100,8 @@ class Game:
     
     def enter_adventure_hub(self):
         self.adventure_hub.make_decision()
+        if self.adventure_hub.exit_flag:
+            self.state = Game_state.idle
+            if not self.adventure_hub.players:
+                self.lock_menu_options()
         

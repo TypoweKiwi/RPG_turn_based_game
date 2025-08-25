@@ -1,20 +1,26 @@
 from Game.UI.HubUI import HubUI
+from Game.UI.Choices_func import make_query
 
 class AdventureHub:
     def __init__(self, players, difficulty_factor=1):
         self.players = players
         self.difficulty_factor = difficulty_factor #Implement difficulty_factor to options in games class let player choose difficulty of game :)
         self.n_completed_adventures = 0
+        self.exit_flag = False
         self.hub_ui = HubUI()
     
     def make_decision(self):
-        pass
+        self.exit_flag = False 
+        choices = self.get_hub_options()
+        choice = make_query(message="Choose hub action", choices=choices)
+        choice()
     
     def choose_adventure(self):
         pass
     
     def start_adventure(self):
-        pass
+        map = self.choose_adventure()
+        map.begin_adventure()
 
     def visit_wizard(self):
         pass
@@ -35,7 +41,7 @@ class AdventureHub:
         pass
 
     def exit_hub(self):
-        return True
+        self.exit_flag = True
 
     def get_hub_options(self):
         choices = [
@@ -46,6 +52,6 @@ class AdventureHub:
             {"name": "Team recovery", "value": self.team_recovery},
             {"name": "Check team information", "value": self.check_team_info},
             {"name": "Recruit adventurer", "value": self.recruit_adventurer},
-            {"name": "Exit hub", "value": self.exit_hub}
+            {"name": "Exit to menu", "value": self.exit_hub}
         ]
         return choices
