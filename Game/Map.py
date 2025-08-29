@@ -23,6 +23,9 @@ class Map:
         else:
             self.current_encounter = SafeEncounter(self.players, room_number=step)
     
+    def generate_boss_encounter(self): #TODO generate boss encounter 
+        pass
+    
     def begin_adventure(self):
         self.generate_safezones()
         for step in range(self.max_steps):
@@ -31,6 +34,9 @@ class Map:
                 self.current_encounter.begin_encounter()
             else:
                 return None
+        if self.boss:
+            self.generate_boss_encounter()
+            self.current_encounter.begin_encounter()
         self.succes_flag = True
     
     def grant_rewards(self): #TODO adding to stash finded items and gold

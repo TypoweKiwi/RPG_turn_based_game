@@ -1,5 +1,5 @@
 import math
-from Game.UI.HubUI import HubUI, make_query
+from Game.UI.HubUI import HubUI, make_query, show_message
 from Game.Map import Map
 
 class AdventureHub:
@@ -37,6 +37,10 @@ class AdventureHub:
     def choose_adventure(self):
         presets = self.generate_map_preset()
         preset = self.hub_ui.choose_map(presets)
+        while preset["cost"] > self.players.wallet:
+            show_message(f"You do not have enough gold to buy this map. \nCurrent gold: {self.players.wallet} \nMap cost: {preset['cost']}")
+            preset = self.hub_ui.choose_map(presets)
+        self.players.wallet -= preset["cost"]
         return Map(
             players=self.players, 
             max_steps=preset["max_steps"],
