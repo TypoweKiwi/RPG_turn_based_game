@@ -1,5 +1,6 @@
-from Game.UI.HubUI import HubUI
-from Game.UI.Choices_func import make_query
+import math
+from Game.UI.HubUI import HubUI, make_query
+from Game.Map import Map
 
 class AdventureHub:
     def __init__(self, players, difficulty_factor=1):
@@ -15,8 +16,34 @@ class AdventureHub:
         choice = make_query(message="Choose hub action", choices=choices)
         choice()
     
+    def generate_map_preset(self):
+        if self.n_completed_adventures%10 == 0: #Every 10th room has boss and player is forced to face him
+            presets = {"boss":{"boss":True}}
+        else:
+            presets = {
+                "short":{"boss":False},
+                "medium":{"boss":False},
+                "long":{"boss":False}
+            }
+        base_steps = min(6, 3 + math.floor(self.n_completed_adventures/10))
+        max_enemies = base_steps = min(5, 3 + math.floor(self.n_completed_adventures/10))
+        for i, key in enumerate(presets.keys):
+            presets[key]["max_steps"] = base_steps + i*3
+            presets[key]["safe_zones_number"] = i
+            presets[key]["max_enemies"] = max_enemies
+            presets[key]["cost"] = i*500
+        return presets
+
     def choose_adventure(self):
-        pass
+        presets = self.generate_map_preset()
+        preset = self.hub_ui.choose_map(presets)
+        return Map(
+            players=self.players, 
+            max_steps=preset["max_steps"],
+            safe_zones_number=preset["safe_zones_number"],
+            max_enemies=preset["max_enemies"],
+            boss = preset["boss"]
+            )
     
     def start_adventure(self):
         map = self.choose_adventure()

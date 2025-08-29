@@ -2,13 +2,14 @@ from Game.Encounter.Encounter import HostileEncounter, SafeEncounter
 import random
 
 class Map:
-    def __init__(self, players, max_steps=3, safe_zones_number = 0, max_enemies = 3):
+    def __init__(self, players, max_steps=3, safe_zones_number = 0, max_enemies = 3, boss=False):
         self.max_steps = max_steps
         self.current_position = 0
         self.players = players
         self.safe_zones = []
         self.safe_zones_number = safe_zones_number
         self.max_enemies = max_enemies
+        self.boss = boss
         self.current_encounter = None
         self.succes_flag = False
 

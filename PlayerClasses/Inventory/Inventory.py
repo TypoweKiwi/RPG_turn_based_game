@@ -3,7 +3,7 @@ from PlayerClasses.Inventory.items_list import ItemType
 
 class Inventory:
     def __init__(self):
-        self.head = None
+        self.head = None #TODO change to dict self.slot_dict = {}
         self.chest = None
         self.legs = None
         self.boots = None 
@@ -18,7 +18,7 @@ class Inventory:
             message = "On which slot do you wish to wear the ring?"
             choices = [{"name": "Ring", "value": "ring"}, {"name": "Second ring", "value": "second_ring"}]
             slot = make_query(message=message, choices=choices)    
-        setattr(self, slot, item)
+        setattr(self, slot.value, item)
     
     def take_item_off(self):
         message = "From which slot you wish to take off item?"
