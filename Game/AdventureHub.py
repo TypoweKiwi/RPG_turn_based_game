@@ -17,7 +17,7 @@ class AdventureHub:
         choice()
     
     def generate_map_preset(self):
-        if self.n_completed_adventures%10 == 0: #Every 10th room has boss and player is forced to face him
+        if (self.n_completed_adventures+1)%10 == 0: #Every 10th room has boss and player is forced to face him
             presets = {"boss":{"boss":True}}
         else:
             presets = {
@@ -27,7 +27,7 @@ class AdventureHub:
             }
         base_steps = min(6, 3 + math.floor(self.n_completed_adventures/10))
         max_enemies = base_steps = min(5, 3 + math.floor(self.n_completed_adventures/10))
-        for i, key in enumerate(presets.keys):
+        for i, key in enumerate(presets):
             presets[key]["max_steps"] = base_steps + i*3
             presets[key]["safe_zones_number"] = i
             presets[key]["max_enemies"] = max_enemies
@@ -48,6 +48,8 @@ class AdventureHub:
     def start_adventure(self):
         map = self.choose_adventure()
         map.begin_adventure()
+        if map.succes_flag:
+            map.grant_rewards()
 
     def visit_wizard(self):
         pass

@@ -16,14 +16,14 @@ class HubUI:
     def map_preset_comparission(self, presets):
         def get_preset_str(preset):
             return (
-                f"[blue]Room numbers[/blue]: {preset["max_steps"]}\n"
-                f"[green]Safe room numbers[/green]: {preset["safe_zones_number"]}\n"
-                f"[red]Max enemies in room[/red]: {preset["max_enemies"]}\n"
-                f"[magenta]Boss[/magenta]: {preset["boss"]}\n"
-                f"[yellow]Gold cost:[/yellow]: {preset["cost"]}"
+                f"[blue]Room numbers[/blue]: {preset['max_steps']}\n"
+                f"[green]Safe room numbers[/green]: {preset['safe_zones_number']}\n"
+                f"[red]Max enemies in room[/red]: {preset['max_enemies']}\n"
+                f"[magenta]Boss[/magenta]: {preset['boss']}\n"
+                f"[yellow]Gold cost[/yellow]: {preset['cost']}"
             )
         
-        panel_lst = [Panel(get_preset_str(presets[key]), title=f"[cyan]{key.capitalize() + " dungeon"}[/cyan]") for key in presets]
+        panel_lst = [Panel(get_preset_str(presets[key]), title=f"[cyan]{key.capitalize() + ' dungeon'}[/cyan]") for key in presets]
         self.show_panel(panel_lst)
     
 

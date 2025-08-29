@@ -12,15 +12,16 @@ class Map:
         self.boss = boss
         self.current_encounter = None
         self.succes_flag = False
+        self.rewards = []
 
     def generate_safezones(self):
         self.safe_zones = random.sample(range(1, self.max_steps+1), self.safe_zones_number)
 
     def generate_encounter(self, step):
         if step not in self.safe_zones:
-            self.current_encounter = HostileEncounter(self.players, max_enemies=3) #TODO adjusting to many encounters
+            self.current_encounter = HostileEncounter(self.players, max_enemies=3, room_number=step) #TODO adjusting to many encounters
         else:
-            self.current_encounter = SafeEncounter(self.players)
+            self.current_encounter = SafeEncounter(self.players, room_number=step)
     
     def begin_adventure(self):
         self.generate_safezones()
@@ -31,6 +32,9 @@ class Map:
             else:
                 return None
         self.succes_flag = True
+    
+    def grant_rewards(self): #TODO adding to stash finded items and gold
+        pass
     
     def __eq__(self, other):
         return isinstance(other, Map) and self.__dict__ == other.__dict__

@@ -8,8 +8,8 @@ import time
 import random 
 
 class Encounter:
-    def __init__(self,  players, hostile):
-        self.description = generate_encounter_desc(hostile)
+    def __init__(self,  players, room_number):
+        self.room_number = room_number
         self.players = players
 
     def begin_encounter(self):
@@ -25,8 +25,8 @@ class Encounter:
         pass
 
 class HostileEncounter(Encounter): 
-    def __init__(self, players, max_enemies):
-        super().__init__(players, hostile=True)
+    def __init__(self, players, max_enemies, room_number):
+        super().__init__(players, room_number)
         self.max_enemies = max_enemies
         self.enemies = Team(name="Enemies")
         self.order_queue = deque()
@@ -34,7 +34,7 @@ class HostileEncounter(Encounter):
             monster_key = random.choice(list(monsters.keys()))
             self.enemies.add_player(monsters[monster_key]())
         
-        self.description += f"\nYour team encounter {self.enemies.get_team_members()}" #TODO better encounter status message
+        self.description = f"\nYour team enter room {self.room_number}\nYour team encounter {self.enemies.get_team_members()}" #TODO better encounter status message
         self.UI = CombatUI(self.players, self.enemies)
 
     def begin_encounter(self):  
@@ -110,8 +110,8 @@ class HostileEncounter(Encounter):
         
 
 class SafeEncounter(Encounter): #TODO safe encouner
-    def __init__(self, players):
-        super().__init__(players, hostile=False)
+    def __init__(self, players, room_number):
+        super().__init__(players, room_number)
         self.encounter_dict = random.choice(safe_encounter_places)
         self.description += self.encounter_dict["desc"] 
 
