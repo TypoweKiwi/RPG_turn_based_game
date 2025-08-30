@@ -3,22 +3,16 @@ from Game.UI.Choices_func import make_query
 from Skills.Skill import Skill
 from Skills.Skills_list import Skill_cost_type
 from PlayerClasses.Inventory.Inventory import Inventory
+from PlayerClasses.Stats import Stats
 from rich.panel import Panel
 
 class Player: 
     def __init__(self, name, basic_stat_dict, hostile = False):
         self.name = name
-        self.max_hp = basic_stat_dict["max_hp"]
-        self.health_points = basic_stat_dict["max_hp"]
-        self.max_mp = basic_stat_dict["max_mp"]
-        self.mana_points = basic_stat_dict["max_mp"]
-        self.max_stamina = basic_stat_dict["max_stamina"]
-        self.stamina = basic_stat_dict["max_stamina"]
-        self.attack_damage = basic_stat_dict["attack_damage"]
-        self.critical_chance = basic_stat_dict["critical_chance"]
-        self.ability_power = basic_stat_dict["ability_power"]
-        self.speed = basic_stat_dict["speed"]
-        self.resistance = basic_stat_dict["resistance"]
+        self.stats = Stats(basic_stat_dict)
+        self.stats.health_points = self.stats.max_hp
+        self.stats.mana_points = self.stats.mana_points
+        self.stats.stamina = self.stats.max_stamina
         self.skills = []
         self.hostile = hostile
         self.inventory = Inventory()
