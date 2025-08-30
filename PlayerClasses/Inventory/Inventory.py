@@ -3,28 +3,30 @@ from PlayerClasses.Inventory.items_list import ItemType
 
 class Inventory:
     def __init__(self):
-        self.head = None #TODO change to dict self.slot_dict = {}
-        self.chest = None
-        self.legs = None
-        self.boots = None 
-        self.ring = None
-        self.second_ring = None 
-        self.necklace = None
-        self.weapon = None #TODO Consider making primary and secondaty weapon -> heavy weapon need special handling
+        self.inventory_dict = {
+            ItemType.head.name: None,
+            ItemType.chest.name: None,
+            ItemType.legs.name: None,
+            ItemType.boots.name:None,
+            ItemType.ring.name: None,
+            "Second" + ItemType.ring.name: None,
+            ItemType.necklace.name:None,
+            ItemType.main_hand.name: None,
+            ItemType.off_hand.name: None
+        }
 
     def equip_item(self, item):
         slot = item.slot
         if slot == ItemType.ring:
             message = "On which slot do you wish to wear the ring?"
-            choices = [{"name": "Ring", "value": "ring"}, {"name": "Second ring", "value": "second_ring"}]
-            slot = make_query(message=message, choices=choices)    
-        setattr(self, slot.value, item)
+            choices = [{"name": "Ring", "value": ItemType.ring.name}, {"name": "Second ring", "value": "Second" + ItemType.ring.name}]
+            slot = make_query(message=message, choices=choices)
+        self.inventory_dict[slot.name] = item
     
-    def take_item_off(self):
-        message = "From which slot you wish to take off item?"
-        attr_dict = self.__dict__
-        choices = [{"name": choice.capitalize().replace("_", " "), "value": choice} for choice in attr_dict.keys()]
-        slot = make_query(message=message, choices=choices)
-        removed_item = getattr(self, slot)
-        setattr(self, slot, None)
+    def take_item_off(self, slot):
+        removed_item = self.inventory_dict[slot.name]
+        self.inventory_dict[slot.name] = None
         return removed_item
+    
+    def get_inventory_sum_stats(self):
+        pass

@@ -7,6 +7,7 @@ class ItemType(Enum):
     boots = "boots"
     ring = "ring"
     necklace = "necklace"
-    weapon = "weapon"
+    main_hand = "main_hand"
+    off_hand = "off_hand"
 
 item_list = []
