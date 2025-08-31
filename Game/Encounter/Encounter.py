@@ -94,7 +94,7 @@ class HostileEncounter(Encounter):
             self.check_target_status(target)
             
     def check_target_status(self, target):  
-        if target.health_points <= 0:
+        if target.stats.health_points <= 0:
             print(f"{target.name} died")
             self.enemies.remove_player(target) if target.hostile else self.players.remove_player(target)
             

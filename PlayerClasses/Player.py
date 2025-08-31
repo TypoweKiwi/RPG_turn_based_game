@@ -74,7 +74,7 @@ class Player:
         return self.stats.get_stats_str()
 
     def get_resistance_str(self):
-        return self.stats.get_stats_str()
+        return self.stats.get_resistance_str()
     
     def get_damage_multiplayers(self):
         return self.stats.get_damage_multiplayers()
