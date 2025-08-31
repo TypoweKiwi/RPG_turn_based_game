@@ -1,5 +1,6 @@
 from Game.UI.Choices_func import make_query
 from PlayerClasses.Inventory.items_list import ItemType
+from PlayerClasses.Stats import Stats
 
 class Inventory:
     def __init__(self):
@@ -28,5 +29,9 @@ class Inventory:
         self.inventory_dict[slot.name] = None
         return removed_item
     
-    def get_inventory_sum_stats(self):
-        pass
+    def get_inventory_stats(self):
+        sum_stats = Stats(basic_stat_dict={}) #This will give blank stats object
+        for key in self.inventory_dict():
+            if not self.inventory_dict[key] == None:
+                sum_stats += self.inventory_dict[key].stats
+        return sum_stats

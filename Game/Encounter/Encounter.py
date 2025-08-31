@@ -55,7 +55,7 @@ class HostileEncounter(Encounter):
     def calculate_turn_order(self):
         self.order_queue.clear()
         objects_sorted = self.players + self.enemies
-        objects_sorted.sort(key=lambda x: x.speed)
+        objects_sorted.sort(key=lambda x: x.stats.speed)
         for obj in objects_sorted:
             self.order_queue.append(obj)
         self.order_queue.reverse()
