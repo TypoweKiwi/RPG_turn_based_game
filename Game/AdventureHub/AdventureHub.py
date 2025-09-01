@@ -49,7 +49,7 @@ class AdventureHub:
             boss = preset["boss"]
             )
     
-    def start_adventure(self):
+    def start_adventure(self): #TODO check what happend if player dies during expedition
         map = self.choose_adventure()
         map.begin_adventure()
         if map.succes_flag:

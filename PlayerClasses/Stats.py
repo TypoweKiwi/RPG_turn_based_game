@@ -1,18 +1,46 @@
-class Stats:
-    def __init__(self, basic_stat_dict):
-        self.max_hp = basic_stat_dict.get("max_hp", 0)
-        self.max_mp = basic_stat_dict.get("max_mp", 0)
-        self.max_stamina = basic_stat_dict.get("max_stamina", 0)
-        self.attack_damage = basic_stat_dict.get("attack_damage", 0)
-        self.critical_chance = basic_stat_dict.get("critical_chance", 0)
-        self.ability_power = basic_stat_dict.get("ability_power", 0)
-        self.speed = basic_stat_dict.get("speed", 0)
-        self.resistance = basic_stat_dict.get("resistance", {})
+#Base scaling values and patterns - for diffrent classes and items both can be changed
+growth_factors = {
+    "max_hp": 1.2,
+    "max_mp": 1.15,
+    "max_stamina": 1.1,
+    "attack_damage": 1.1,
+    "critical_chance": 1.01,
+    "ability_power": 1.1,
+    "speed": 1.05
+}
 
-        self.health_points = 0
-        self.mana_points = 0
-        self.stamina = 0
+scaling_pattern = {
+    "max_hp": lambda base, level, f: int(base * (level ** f)),
+    "max_mp": lambda base, level, f: int(base * (level ** f)),
+    "max_stamina": lambda base, level, f: int(base * (level ** f)),
+    "attack_damage": lambda base, level, f: int(base * (base + level * f)),
+    "critical_chance": lambda base, level, f: base + (level * f),
+    "ability_power": lambda base, level, f: int(base * (level ** f)),
+    "speed": lambda base, level, f: base + level * f
+}
     
+class Stats:
+    def __init__(self, basic_stat_dict, level, growth_factors=growth_factors, scaling_pattern=scaling_pattern): #TODO diffrent growthfactors for diffrent classes
+        self.growth_factors = growth_factors
+        self.scaling_pattern = scaling_pattern
+        self.basic_stats_dict = basic_stat_dict
+        self.update_stats(level)
+        self.health_points = self.max_hp
+        self.mana_points = self.max_mp
+        self.stamina = self.max_stamina
+    
+    def calculate_stat_value(self, key, level):
+        return self.scaling_pattern[key](self.basic_stats_dict.get(key, 0), level, self.growth_factors[key])
+    
+    def update_stats(self, level):
+        self.max_hp = self.calculate_stat_value("max_hp", level)
+        self.max_mp = self.calculate_stat_value("max_mp", level)
+        self.max_stamina = self.calculate_stat_value("max_stamina", level)
+        self.attack_damage = self.calculate_stat_value("attack_damage", level)
+        self.critical_chance = self.calculate_stat_value("critical_chance", level)
+        self.ability_power = self.calculate_stat_value("ability_power", level)
+        self.speed = self.calculate_stat_value("speed", level)
+
     def get_current_stats_percintile(self):
         hp_percintile = self.health_points/self.max_hp
         mana_percintile = self.mana_points/self.max_mp

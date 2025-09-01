@@ -19,7 +19,7 @@ class Map:
 
     def generate_encounter(self, step):
         if step not in self.safe_zones:
-            self.current_encounter = HostileEncounter(self.players, max_enemies=3, room_number=step) #TODO adjusting to many encounters
+            self.current_encounter = HostileEncounter(self.players, max_enemies=self.max_enemies, room_number=step)
         else:
             self.current_encounter = SafeEncounter(self.players, room_number=step)
     
