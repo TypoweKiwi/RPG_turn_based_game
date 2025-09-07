@@ -1,5 +1,5 @@
 from Game.UI.Choices_func import make_query
-from PlayerClasses.Inventory.items_list import ItemType
+from PlayerClasses.Inventory.armor_list import ItemType
 from PlayerClasses.Stats import Stats
 
 class Inventory:
@@ -22,11 +22,11 @@ class Inventory:
             message = "On which slot do you wish to wear the ring?"
             choices = [{"name": "Ring", "value": ItemType.ring.name}, {"name": "Second ring", "value": "Second" + ItemType.ring.name}]
             slot = make_query(message=message, choices=choices)
-        self.inventory_dict[slot.name] = item
+        self.inventory_dict[slot] = item
     
     def take_item_off(self, slot):
-        removed_item = self.inventory_dict[slot.name]
-        self.inventory_dict[slot.name] = None
+        removed_item = self.inventory_dict[slot]
+        self.inventory_dict[slot] = None
         return removed_item
     
     def get_inventory_stats(self):

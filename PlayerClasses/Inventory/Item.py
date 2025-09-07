@@ -6,3 +6,4 @@ class Item:
         self.desc = item_stats_dict["desc"]
         self.stats = Stats(item_stats_dict)
         self.slot = item_stats_dict["slot"]
+        self.block_off_hand = item_stats_dict.get("block_off_hand", False)
