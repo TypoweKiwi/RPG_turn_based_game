@@ -31,7 +31,7 @@ class Inventory:
     
     def get_inventory_stats(self):
         sum_stats = Stats(basic_stat_dict={}) #This will give blank stats object
-        for key in self.inventory_dict():
+        for key in self.inventory_dict:
             if not self.inventory_dict[key] == None:
                 sum_stats += self.inventory_dict[key].stats
         return sum_stats

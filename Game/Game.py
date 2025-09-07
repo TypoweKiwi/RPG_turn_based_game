@@ -1,6 +1,6 @@
 from PlayerClasses.Classes import classes
 from PlayerClasses.Team import Team
-from Game.AdventureHub import AdventureHub
+from Game.AdventureHub.AdventureHub import AdventureHub
 from enum import Enum
 from Game.UI.Choices_func import make_query, show_message
 from Game.Saves.Saves_game_func import save_game, return_save_name, save_path
@@ -91,7 +91,7 @@ class Game:
     def end_game(self):
         self.state = Game_state.end
     
-    def start_menu(self): #TODO moving menu methods to additional game menu class
+    def start_menu(self): 
         choice = make_query(message="\nWelcome! \nChoose action: ", choices=self.menu_choices)
         choice()
 

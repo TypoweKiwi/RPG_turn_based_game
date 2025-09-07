@@ -12,24 +12,29 @@ class Player:
         self.hostile = hostile
 
         #Stats - We hold two variables: one for player stats and other for sum of player and invetory stats
-        self.base_stats = Stats(basic_stat_dict)
+        self.base_stats = Stats(basic_stat_dict, level)
         self.stats = self.base_stats 
 
-        #Skills/inventory
+        #Skills/inventory/Level/Exp
         self.skills = []
         self.inventory = Inventory()
-
-        #Exp/lvl
-        self.level = level
+        self.set_level(level)
         self.current_exp = 0
-        self.required_exp = 100
     
-    def level_up(self):
-        self.level += 1
+    def set_level(self, level):
+        self.level = level
         self.required_exp = int(100*(self.level)**2)
-        self.current_exp = 0
         self.base_stats.update_stats(self.level)
         self.recalculate_stats()
+    
+    def check_level_up(self):
+        while self.current_exp >= self.required_exp:
+            self.current_exp -= self.required_exp
+            self.set_level(level=self.level+1) #TODO announcement about level up 
+    
+    def gain_exp(self, amount):
+        self.current_exp += amount
+        self.check_level_up()
 
     def take_hit(self, damage, type):
         damage = reduce_dmg(damage, self.stats.resistance[type.name])
@@ -37,7 +42,7 @@ class Player:
         self.stats.health_points -= damage
     
     def recalculate_stats(self):
-        hp_perc, mana_perc, stamina_perc = self.stats.get_current_stats_percintile #Dynamic statistics are calculated as a percentage
+        hp_perc, mana_perc, stamina_perc = self.stats.get_current_stats_percintile() #Dynamic statistics are calculated as a percentage
         self.stats = self.base_stats + self.inventory.get_inventory_stats() #Add method do not add dynamic stats like hp and mp
         self.stats.health_points = self.stats.max_hp * hp_perc
         self.stats.mana_points = self.stats.max_mp * mana_perc

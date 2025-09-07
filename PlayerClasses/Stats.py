@@ -20,11 +20,12 @@ scaling_pattern = {
 }
     
 class Stats:
-    def __init__(self, basic_stat_dict, level, growth_factors=growth_factors, scaling_pattern=scaling_pattern): #TODO diffrent growthfactors for diffrent classes
+    def __init__(self, basic_stat_dict, level=1, growth_factors=growth_factors, scaling_pattern=scaling_pattern): #TODO diffrent growthfactors for diffrent classes
         self.growth_factors = growth_factors
         self.scaling_pattern = scaling_pattern
         self.basic_stats_dict = basic_stat_dict
         self.update_stats(level)
+        self.resistance = self.basic_stats_dict.get("resistance", {})
         self.health_points = self.max_hp
         self.mana_points = self.max_mp
         self.stamina = self.max_stamina
