@@ -4,19 +4,19 @@ growth_factors = {
     "max_mp": 1.15,
     "max_stamina": 1.1,
     "attack_damage": 1.1,
-    "critical_chance": 1.01,
+    "critical_chance": 1.005,
     "ability_power": 1.1,
-    "speed": 1.05
+    "speed": 1.01
 }
 
 scaling_pattern = {
     "max_hp": lambda base, level, f: int(base * (level ** f)),
     "max_mp": lambda base, level, f: int(base * (level ** f)),
     "max_stamina": lambda base, level, f: int(base * (level ** f)),
-    "attack_damage": lambda base, level, f: int(base * (base + level * f)),
-    "critical_chance": lambda base, level, f: base + (level * f),
+    "attack_damage": lambda base, level, f: int(base * (level ** f)),
+    "critical_chance": lambda base, level, f: int(base * (level ** f)),
     "ability_power": lambda base, level, f: int(base * (level ** f)),
-    "speed": lambda base, level, f: base + level * f
+    "speed": lambda base, level, f: int(base * (level ** f))
 }
     
 class Stats:
@@ -43,21 +43,23 @@ class Stats:
         self.speed = self.calculate_stat_value("speed", level)
 
     def get_current_stats_percintile(self):
-        hp_percintile = self.health_points/self.max_hp
-        mana_percintile = self.mana_points/self.max_mp
-        stamina_percintile = self.stamina/self.max_stamina
+        hp_percintile = self.health_points/self.max_hp 
+        mana_percintile = self.mana_points/self.max_mp if self.max_mp > 1 else 0
+        stamina_percintile = self.stamina/self.max_stamina if self.max_stamina > 1 else 0
         return hp_percintile, mana_percintile, stamina_percintile
 
     def __add__(self, other):
+        all_keys = set(self.resistance.keys()) | set(other.resistance.keys())
         return Stats({
             "max_hp": self.max_hp + other.max_hp, 
             "max_mp": self.max_mp + other.max_mp,
+            "max_stamina": self.max_stamina + other.max_stamina,
             "attack_damage": self.attack_damage + other.attack_damage,
             "critical_chance": self.critical_chance + other.critical_chance,
             "ability_power": self.ability_power + other.ability_power,
             "speed": self.speed + other.speed,
-            "resistance": {key: self.resistance.get(key, 0) + other.resistance[key] for key in other.resistance} 
-        })
+            "resistance": {key: self.resistance.get(key, 0) + other.resistance.get(key, 0) for key in all_keys} 
+        }, level=1)
 
     def get_stats_str(self):
         return (

@@ -1,5 +1,5 @@
 from Game.UI.Choices_func import make_query, show_message
-from PlayerClasses.Inventory.armor_list import ItemType
+from PlayerClasses.Inventory.Item_and_affixes_lists.armor_list import ItemType
 from PlayerClasses.Stats import Stats
 
 class Inventory:
@@ -69,5 +69,5 @@ class Inventory:
         sum_stats = Stats(basic_stat_dict={}) #This will give blank stats object
         for key in self.inventory_dict:
             if not self.inventory_dict[key] == None:
-                sum_stats += self.inventory_dict[key].stats
+                sum_stats += self.inventory_dict[key].get_stats_to_calculate()
         return sum_stats

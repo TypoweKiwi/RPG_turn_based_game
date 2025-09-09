@@ -1,4 +1,4 @@
-from PlayerClasses.Inventory.armor_list import DamageType, ItemType
+from PlayerClasses.Inventory.Item_and_affixes_lists.armor_list import DamageType, ItemType
 
 
 
