@@ -64,11 +64,11 @@ priest_staff_dict = {
 }
 
 
-weapon_templates_list = {
+weapon_templates_list = [
     viking_axe_dict,
     viking_double_axe_dict,
     viking_shield_dict,
     holy_bible_dict,
     priest_thurible_dict,
     priest_staff_dict
-}
+]

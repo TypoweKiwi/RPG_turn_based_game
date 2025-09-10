@@ -21,17 +21,18 @@ class AdventureHub:
             presets = {"boss":{"boss":True}}
         else:
             presets = {
-                "short":{"boss":False},
-                "medium":{"boss":False},
-                "long":{"boss":False}
+                "short":{"boss":False, "difficulty_key": "short"},
+                "medium":{"boss":False, "difficulty_key": "medium"},
+                "long":{"boss":False, "difficulty_key": "long"}
             }
         base_steps = min(6, 3 + math.floor(self.n_completed_adventures/10))
         max_enemies = base_steps = min(5, 3 + math.floor(self.n_completed_adventures/10))
+        base_cost = 500
         for i, key in enumerate(presets):
             presets[key]["max_steps"] = base_steps + i*3
             presets[key]["safe_zones_number"] = i
             presets[key]["max_enemies"] = max_enemies
-            presets[key]["cost"] = i*500
+            presets[key]["cost"] = i*int(base_cost * (1 + self.players.get_team_level() ** 1.1))
         return presets
 
     def choose_adventure(self):
@@ -46,8 +47,9 @@ class AdventureHub:
             max_steps=preset["max_steps"],
             safe_zones_number=preset["safe_zones_number"],
             max_enemies=preset["max_enemies"],
-            boss = preset["boss"]
-            )
+            boss = preset["boss"],
+            difficulty_key= preset["difficulty_key"]
+        )
     
     def start_adventure(self): #TODO check what happend if player dies during expedition
         map = self.choose_adventure()

@@ -3,8 +3,8 @@ from Skills.Skills_list import basic_attack_dict, heavy_strike_dict, barbaric_ch
 from PlayerClasses.Basic_stats import barbarian_stats_dict
 
 class Barbarian(Player):  
-    def __init__(self, name="Barbarian", basic_stat_dict=barbarian_stats_dict):
-        super().__init__(name, basic_stat_dict)
+    def __init__(self, name="Barbarian", basic_stat_dict=barbarian_stats_dict, level=1):
+        super().__init__(name, basic_stat_dict, level=level)
 
         self.skills = [
             Skill(basic_attack_dict),

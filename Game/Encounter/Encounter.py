@@ -11,6 +11,7 @@ class Encounter:
     def __init__(self,  players, room_number):
         self.room_number = room_number
         self.players = players
+        self.n_enemies = 0
 
     def begin_encounter(self):
         pass
@@ -25,15 +26,20 @@ class Encounter:
         pass
 
 class HostileEncounter(Encounter): 
-    def __init__(self, players, max_enemies, room_number):
+    def __init__(self, players, max_enemies, room_number, team_level):
         super().__init__(players, room_number)
+        #Enemies generation
         self.max_enemies = max_enemies
         self.enemies = Team(name="Enemies")
-        self.order_queue = deque()
         for i in range(random.randint(1, self.max_enemies)):
             monster_key = random.choice(list(monsters.keys()))
-            self.enemies.add_player(monsters[monster_key]())
+            self.enemies.add_player(monsters[monster_key](level=team_level))
+            self.n_enemies += 1
+
+        #Turn order queque
+        self.order_queue = deque()
         
+        #Descriptions and UI
         self.description = f"\nYour team enter room {self.room_number}\nYour team encounter {self.enemies.get_team_members()}" #TODO better encounter status message
         self.UI = CombatUI(self.players, self.enemies)
 

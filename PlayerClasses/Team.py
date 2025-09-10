@@ -57,6 +57,12 @@ class Team:
     def remove_gold(self, amount):
         self.wallet -= amount
     
+    def get_team_level(self):
+        sum_level = 0
+        for player in self._players:
+            sum_level += player.level
+        return int(sum_level/len(self._players))
+    
     def __eq__(self, other):
         return isinstance(other, Team) and self.__dict__ == other.__dict__
 
