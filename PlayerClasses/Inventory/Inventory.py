@@ -57,6 +57,7 @@ class Inventory:
         main_item = self.inventory_dict[ItemType.main_hand.name]
         if main_item and main_item.block_off_hand:
             show_message("You cannot equip an off-hand item while wielding a two-handed weapon")
+            self.temporary_stash.append(item)
         else:
             self.equip_item_on_slot(item, item.slot)
 
