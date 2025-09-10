@@ -1,6 +1,7 @@
 class Stash:
     def __init__(self):
         self.items_list = []
+        self.wallet = 0 #TODO add wallet class 
     
     def add_item(self, item):
         self.items_list.append(item)

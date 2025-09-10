@@ -24,7 +24,7 @@ class Inventory:
 
     def transfer_to_stash(self, stash):
         for item in self.temporary_stash:
-            stash.append(item)
+            stash.add_item(item)
         self.temporary_stash = []
 
     def equip_item(self, item, stash):

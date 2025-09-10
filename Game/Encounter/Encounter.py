@@ -8,8 +8,10 @@ import time
 import random 
 
 class Encounter:
-    def __init__(self,  players, room_number):
+    def __init__(self,  players, room_number, max_enemies, team_level):
         self.room_number = room_number
+        self.max_enemies = max_enemies
+        self.team_level = team_level
         self.players = players
         self.n_enemies = 0
 
@@ -26,10 +28,8 @@ class Encounter:
         pass
 
 class HostileEncounter(Encounter): 
-    def __init__(self, players, max_enemies, room_number, team_level):
-        super().__init__(players, room_number)
-        #Enemies generation
-        self.max_enemies = max_enemies
+    def __init__(self, players, room_number, max_enemies, team_level):
+        super().__init__(players, room_number, max_enemies, team_level)
         self.enemies = Team(name="Enemies")
         for i in range(random.randint(1, self.max_enemies)):
             monster_key = random.choice(list(monsters.keys()))
@@ -116,11 +116,14 @@ class HostileEncounter(Encounter):
         
 
 class SafeEncounter(Encounter): #TODO safe encouner
-    def __init__(self, players, room_number):
-        super().__init__(players, room_number)
+    def __init__(self, players, room_number, max_enemies, team_level):
+        super().__init__(players, room_number, max_enemies, team_level)
         self.encounter_dict = random.choice(safe_encounter_places)
         self.description += self.encounter_dict["desc"] 
 
     def begin_encounter(self):
         show_message(self.description)
         self.encounter_dict["action"](self.players)
+
+class BossEncounter(Encounter):
+    pass

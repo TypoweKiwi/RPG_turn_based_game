@@ -7,7 +7,6 @@ class Team:
         self.name = name
         self._players = []
         self.stash = Stash()
-        self.wallet = 0
 
     def add_player(self, player):
         if len(self._players) < 4:
