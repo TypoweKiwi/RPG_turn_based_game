@@ -7,6 +7,7 @@ class Item:
         self.stats = Stats(item_stats_dict["basic_stat_dict"], level)
         self.slot = item_stats_dict["slot"]
         self.block_off_hand = item_stats_dict.get("block_off_hand", False)
+        self.level = level
 
         #Prefix and rarity
         self.rarity = rarity

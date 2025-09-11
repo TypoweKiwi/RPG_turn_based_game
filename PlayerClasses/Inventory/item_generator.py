@@ -4,15 +4,17 @@ from PlayerClasses.Inventory.Item_and_affixes_lists.weapons_list import weapon_t
 from PlayerClasses.Inventory.Item import Item
 import random
 
+rarity_affix = { #We define this dict outside class bacuse it will be used in another file (Stash)
+    "Base": common_prefixes_lst,
+    "Uncommon": uncommon_prefixes_lst,
+    "Rare": rare_prefixes_lst,
+    "Epic": epic_prefixes_lst,
+    "Legendary": legendary_prefixes_lst
+}
+
 class Item_generator:
     def __init__(self):
-        self.rarity_affix = {
-            "Base": common_prefixes_lst,
-            "Uncommon": uncommon_prefixes_lst,
-            "Rare": rare_prefixes_lst,
-            "Epic": epic_prefixes_lst,
-            "Legendary": legendary_prefixes_lst
-        }
+        self.rarity_affix = rarity_affix
 
         self.difficulty_table = { #For each of four difficulties there will be diffrent rewards -> (rarities, weights)
             "short" : (["Base", "Uncommon", "Rare"], [0.5, 0.3, 0.2,]),
