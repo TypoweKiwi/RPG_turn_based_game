@@ -1,4 +1,3 @@
-from PlayerClasses.Inventory.Item import Item
 from PlayerClasses.Inventory.Item_and_affixes_lists.armor_list import ItemType
 from PlayerClasses.Inventory.item_generator import rarity_affix
 from PlayerClasses.Stats import scaling_pattern
@@ -8,6 +7,7 @@ class Stash:
     def __init__(self):
         self.items_list = []
         self.filtered_items = self.items_list
+        self.n_items_to_view = 5
         self.wallet = 0 #TODO add wallet class 
     
     def add_item(self, item):
@@ -61,3 +61,33 @@ class Stash:
 
     def clear_filter(self):
         self.filtered_items = self.items_list
+    
+    def exit_view_panel(self):
+        self.view_status = False
+    
+    def next_page(self):
+        if self.stop < len(self.filtered_items):
+            self.start += self.n_items_to_view
+            self.stop = min(self.stop + self.n_items_to_view, len(self.filtered_items))
+
+    def previous_page(self):
+        if self.start > 0:
+            self.start -= self.n_items_to_view
+            self.stop = self.start + self.n_items_to_view
+    
+    def view_items(self):
+        message = "\nChoose item to inspect/equip: "
+        self.view_status = True
+        self.start = 0
+        self.stop = min(self.n_items_to_view, len(self.filtered_items))
+        while self.view_status:
+            choices = [{"name": f"{i+1}. {self.filtered_items[i].get_name()}", "value": (self.item_options, self.filtered_items[i])} for i in range(self.start, self.stop)]
+            choices.append({"name": "Next page", "value": (self.next_page, None)})
+            choices.append({"name": "Previous page", "value": (self.previous_page, None)})
+            choices.append({"name": "Back", "value": (self.exit_view_panel, None)})
+            choice = make_query(message=message, choices=choices)
+            func, arg = choice
+            func(arg) if arg else func()
+
+    def item_options(self, item):
+        pass
