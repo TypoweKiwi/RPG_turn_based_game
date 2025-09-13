@@ -72,6 +72,23 @@ class Stats:
             f"[white]SPD[/white]: {self.speed}\n"
         )
     
+    def get_item_stats_str(self): #Method that works only for items (Items will not show stats than have value 0)
+        def format_stats(label, value): #Helper function to clear stats that item does not give
+            if value == 0:
+                return ""
+            else:
+                return f"{label}: {value:.2f}\n"
+        stats_str_parts = [
+            format_stats("[red]Max HP[/red]", self.max_hp),
+            format_stats("[blue]Max MP[/blue]", self.max_mp),
+            format_stats("[yellow]Max ST[/yellow]", self.max_stamina),
+            format_stats("[cyan]ATK[/cyan]", self.attack_damage),
+            format_stats("[magenta]AP[/magenta]", self.ability_power),
+            format_stats("[green]CRIT%[/green]", self.critical_chance),
+            format_stats("[white]SPD[/white]", self.speed)
+        ]
+        return "".join([part for part in stats_str_parts if part])
+    
     def get_resistance_str(self):
         color_dict = {
             "physical": "red",

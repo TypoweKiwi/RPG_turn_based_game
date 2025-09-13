@@ -1,5 +1,13 @@
 from PlayerClasses.Stats import Stats
 
+rarity_colors = { #Colors will be neded in diffrent UI classes thats why we define it global and use it in item class
+    "Base": "white",
+    "Uncommon": "green",
+    "Rare": "blue",
+    "Epic": "magenta",
+    "Legendary": "yellow"
+}
+
 class Item:
     def __init__(self, item_stats_dict, prefix_dict, level=1, rarity=""):
         self.name = item_stats_dict["name"]
@@ -11,6 +19,7 @@ class Item:
 
         #Prefix and rarity
         self.rarity = rarity
+        self.rarity_color = rarity_colors["rarity"]
         self.prefix_name = prefix_dict["name"]
         self.prefix_stats = Stats(prefix_dict["basic_stat_dict"], level)
 
@@ -19,4 +28,13 @@ class Item:
     
     def get_stats_to_calculate(self):
         return (self.stats + self.prefix_stats)
+    
+    def get_item_stats_str(self):
+        return (self.stats + self.prefix_stats).get_item_stats_str()
+    
+    def get_item_raw_stats(self):
+        return self.stats.get_item_stats_str()
+    
+    def get_prefix_raw_stats(self):
+        return self.prefix_stats.get_item_stats_str
     

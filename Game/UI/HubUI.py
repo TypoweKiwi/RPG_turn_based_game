@@ -36,4 +36,35 @@ class HubUI:
             if isinstance(preset, dict):
                 return preset
             preset(presets)
+
+    def exit_view_panel(self):
+        self.view_status = False
         
+    def next_page(self, items):
+        if self.stop < len(items):
+            self.start += self.n_items_to_view
+            self.stop = min(self.stop + self.n_items_to_view, len(self.filtered_items))
+
+    def previous_page(self):
+        if self.start > 0:
+            self.start -= self.n_items_to_view
+            self.stop = self.start + self.n_items_to_view
+    
+    def view_items(self, items):
+        message = "\nChoose item to inspect/equip: "
+        self.n_items_to_view = 5
+        self.view_status = True
+        self.start = 0
+        self.stop = min(self.n_items_to_view, len(items))
+        while self.view_status:
+            choices = [{"name": f"{i+1}. {items[i].get_name()}", "value": (self.show_item_panel, items[i])} for i in range(self.start, self.stop)]
+            choices.append({"name": "Next page", "value": (self.next_page, None)})
+            choices.append({"name": "Previous page", "value": (self.previous_page, None)})
+            choices.append({"name": "Back", "value": (self.exit_view_panel, None)})
+            choice = make_query(message=message, choices=choices)
+            func, arg = choice
+            func(arg) if arg else func()
+    
+    def show_item_panel(self, item):
+        item_panel = Panel(item.get_item_stats_str(), title=f"[{item.rarity_color}]{item.get_name()}[/{item.rarity_color}]")
+        self.show_panel(item_panel)
