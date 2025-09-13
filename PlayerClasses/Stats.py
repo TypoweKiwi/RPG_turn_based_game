@@ -77,7 +77,7 @@ class Stats:
             if value == 0:
                 return ""
             else:
-                return f"{label}: {value:.2f}\n"
+                return f"{label}: {value:.2f}"
         stats_str_parts = [
             format_stats("[red]Max HP[/red]", self.max_hp),
             format_stats("[blue]Max MP[/blue]", self.max_mp),
@@ -87,7 +87,7 @@ class Stats:
             format_stats("[green]CRIT%[/green]", self.critical_chance),
             format_stats("[white]SPD[/white]", self.speed)
         ]
-        return "".join([part for part in stats_str_parts if part])
+        return "\n".join([part for part in stats_str_parts if part])
     
     def get_resistance_str(self):
         color_dict = {

@@ -40,7 +40,7 @@ class HubUI:
     def exit_view_panel(self):
         self.view_status = False
         
-    def next_page(self, items):
+    def next_page(self, items=[]):
         if self.stop < len(items):
             self.start += self.n_items_to_view
             self.stop = min(self.stop + self.n_items_to_view, len(self.filtered_items))
@@ -56,10 +56,10 @@ class HubUI:
         self.n_items_to_view = 5
         self.view_status = True
         self.start = 0
-        self.stop = min(self.n_items_to_view, len(items))
         while self.view_status:
+            self.stop = min(self.start + self.n_items_to_view, len(items))
             choices = [{"name": f"{i+1}. {items[i].get_name()}", "value": (self.item_options, items[i])} for i in range(self.start, self.stop)]
-            choices.append({"name": "Next page", "value": (self.next_page, None)})
+            choices.append({"name": "Next page", "value": (self.next_page, items)})
             choices.append({"name": "Previous page", "value": (self.previous_page, None)})
             choices.append({"name": "Back", "value": (self.exit_view_panel, None)})
             choice = make_query(message=message, choices=choices)
@@ -67,8 +67,10 @@ class HubUI:
             func(arg) if arg else func()
     
     def show_item_panel(self, item):
-        item_panel = Panel(item.get_item_stats_str(), title=f"[{item.rarity_color}]{item.get_name()}[/{item.rarity_color}]")
-        self.show_panel(item_panel)
+        desc = item.desc
+        stats = item.get_item_stats_str()
+        item_panel = Panel((desc + "\n" + stats), title=f"[{item.rarity_color}]{item.get_name()}[/{item.rarity_color}]")
+        self.show_panel([item_panel])
 
     def item_options(self, item):
         message = "\nWhat would you do with this item?"

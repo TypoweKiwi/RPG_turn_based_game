@@ -55,6 +55,7 @@ class Team:
     def equip_item(self, item):
         player = self.choose_player()
         player.inventory.equip_item(item, self.stash)
+        self.stash.items_list.remove(item)
     
     def take_item_off(self, slot):
         player = self.choose_player()

@@ -9,7 +9,7 @@ rarity_colors = { #Colors will be neded in diffrent UI classes thats why we defi
 }
 
 class Item:
-    def __init__(self, item_stats_dict, prefix_dict, level=1, rarity=""):
+    def __init__(self, item_stats_dict, prefix_dict, level=1, rarity="Base"):
         self.name = item_stats_dict["name"]
         self.desc = item_stats_dict["desc"]
         self.stats = Stats(item_stats_dict["basic_stat_dict"], level)
@@ -19,7 +19,7 @@ class Item:
 
         #Prefix and rarity
         self.rarity = rarity
-        self.rarity_color = rarity_colors["rarity"]
+        self.rarity_color = rarity_colors[rarity]
         self.prefix_name = prefix_dict["name"]
         self.prefix_stats = Stats(prefix_dict["basic_stat_dict"], level)
 
