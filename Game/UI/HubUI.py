@@ -4,8 +4,8 @@ from rich.columns import Columns
 from rich.panel import Panel
 
 class HubUI:
-    def __init__(self):
-        pass
+    def __init__(self, team):
+        self.team = team
     
     def show_panel(self, panel):
         console = Console()
@@ -50,14 +50,15 @@ class HubUI:
             self.start -= self.n_items_to_view
             self.stop = self.start + self.n_items_to_view
     
-    def view_items(self, items):
+    def view_items(self):
+        items = self.team.stash.filtered_items
         message = "\nChoose item to inspect/equip: "
         self.n_items_to_view = 5
         self.view_status = True
         self.start = 0
         self.stop = min(self.n_items_to_view, len(items))
         while self.view_status:
-            choices = [{"name": f"{i+1}. {items[i].get_name()}", "value": (self.show_item_panel, items[i])} for i in range(self.start, self.stop)]
+            choices = [{"name": f"{i+1}. {items[i].get_name()}", "value": (self.item_options, items[i])} for i in range(self.start, self.stop)]
             choices.append({"name": "Next page", "value": (self.next_page, None)})
             choices.append({"name": "Previous page", "value": (self.previous_page, None)})
             choices.append({"name": "Back", "value": (self.exit_view_panel, None)})
@@ -68,3 +69,15 @@ class HubUI:
     def show_item_panel(self, item):
         item_panel = Panel(item.get_item_stats_str(), title=f"[{item.rarity_color}]{item.get_name()}[/{item.rarity_color}]")
         self.show_panel(item_panel)
+
+    def item_options(self, item):
+        message = "\nWhat would you do with this item?"
+        choices = [
+            {"name": "Inspect item", "value": lambda: self.show_item_panel(item)},
+            {"name": "Equip item", "value": lambda: self.team.equip_item(item)},
+            {"name": "Sell item", "value": lambda: print("Not implemented yet")}, #TODO sell item
+            {"name": "Back", "value": lambda: None}
+        ]
+        choice = make_query(message=message, choices=choices)
+        choice()
+

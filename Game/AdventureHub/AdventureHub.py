@@ -8,7 +8,7 @@ class AdventureHub:
         self.difficulty_factor = difficulty_factor #Implement difficulty_factor to options in games class let player choose difficulty of game :)
         self.n_completed_adventures = 0
         self.exit_flag = False
-        self.hub_ui = HubUI()
+        self.hub_ui = HubUI(players)
     
     def make_decision(self):
         self.exit_flag = False 

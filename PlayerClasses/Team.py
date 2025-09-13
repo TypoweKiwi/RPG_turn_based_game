@@ -21,26 +21,12 @@ class Team:
                 self._players[member_index] = classes[player]()
                 return True
         return False
-    
-    def get_team_members(self):
-        return self._players
-    
-    def __add__(self, other):
-        if isinstance(other, Team):
-            return self._players + other._players
-        raise TypeError("Can only add another Team.")
 
     def remove_player(self, player):
         self._players.remove(player)
-
-    def __getitem__(self, index):
-        return self._players[index]
-
-    def __setitem__(self, index, value):
-        if isinstance(value, Player):
-            self._players[index] = value
-        else:
-            raise TypeError("Only Player instances can be assigned.")
+    
+    def get_team_members(self):
+        return self._players
     
     def player_stats_panel(self, resistance=False):
         panel_lst = []
@@ -61,6 +47,32 @@ class Team:
         for player in self._players:
             sum_level += player.level
         return int(sum_level/len(self._players))
+
+    def choose_player(self):
+        message = "On which character you wish to equip this item?"
+        return make_query(message=message, choices=self._players.copy())
+    
+    def equip_item(self, item):
+        player = self.choose_player()
+        player.inventory.equip_item(item, self.stash)
+    
+    def take_item_off(self, slot):
+        player = self.choose_player()
+        player.inventory.take_item_off(slot, self.stash)
+
+    def __add__(self, other):
+        if isinstance(other, Team):
+            return self._players + other._players
+        raise TypeError("Can only add another Team.")
+
+    def __setitem__(self, index, value):
+        if isinstance(value, Player):
+            self._players[index] = value
+        else:
+            raise TypeError("Only Player instances can be assigned.")
+
+    def __getitem__(self, index):
+        return self._players[index]
     
     def __eq__(self, other):
         return isinstance(other, Team) and self.__dict__ == other.__dict__
