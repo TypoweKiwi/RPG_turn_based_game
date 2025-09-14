@@ -49,7 +49,7 @@ class Team:
         return int(sum_level/len(self._players))
 
     def choose_player(self):
-        message = "On which character you wish to equip this item?"
+        message = "On which character you wish to perform action?"
         return make_query(message=message, choices=self._players.copy())
     
     def equip_item(self, item):
@@ -59,6 +59,9 @@ class Team:
     
     def take_item_off(self, slot):
         player = self.choose_player()
+        message = "From which slot do you wish to unequip item?"
+        choices = [{"name": key.capitalize(), "value": key} for key in player.inventory.inventory_dict]
+        slot = make_query(message, choices)
         player.inventory.take_item_off(slot, self.stash)
 
     def __add__(self, other):

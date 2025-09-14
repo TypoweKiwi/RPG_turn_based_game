@@ -56,9 +56,9 @@ class HubUI:
         self.n_items_to_view = 5
         self.view_status = True
         self.start = 0
-        while self.view_status:
+        while self.view_status: #We dynamicly make choices lst bacause item list changes after equiping - we want list to update if item is taken or given
             self.stop = min(self.start + self.n_items_to_view, len(items))
-            choices = [{"name": f"{i+1}. {items[i].get_name()}", "value": (self.item_options, items[i])} for i in range(self.start, self.stop)]
+            choices = [{"name": f"{i+1}. {items[i].get_name()}", "value": (self.item_options, items[i])} for i in range(self.start, self.stop)] 
             choices.append({"name": "Next page", "value": (self.next_page, items)})
             choices.append({"name": "Previous page", "value": (self.previous_page, None)})
             choices.append({"name": "Back", "value": (self.exit_view_panel, None)})
@@ -82,4 +82,26 @@ class HubUI:
         ]
         choice = make_query(message=message, choices=choices)
         choice()
+    
+    def modify_player_inventory(self):
+        self.view_status = True
+        message = "\n What action you wish to perform?"
+        choices = [
+            {"name": "Inspect inventory", "value": lambda: self.inspect_player_inventory(self.team.choose_player())},
+            {"name": "Take off item", "value": lambda: self.team.take_item_off()},
+            {"name": "Back", "value": self.exit_view_panel}
+        ]
+        while self.view_status:
+            choice = make_query(message, choices)
+            choice()
+    
+    def inspect_player_inventory(self, player):
+        panel_lst = []
+        for key in player.inventory.inventory_dict:
+            item = player.inventory.inventory_dict[key] 
+            item_str = item.get_name+"\n"+item.get_item_stats_str if item else "No item"
+            panel_lst.append(Panel((item_str), title=key.capitalize()))
+        self.show_panel(panel_lst)         
+
+
 

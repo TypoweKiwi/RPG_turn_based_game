@@ -72,3 +72,5 @@ class Inventory:
             if not self.inventory_dict[key] == None:
                 sum_stats += self.inventory_dict[key].get_stats_to_calculate()
         return sum_stats
+    
+
