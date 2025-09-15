@@ -66,5 +66,6 @@ class CombatUI:
     def show_panel(self, panel):
         console = Console()
         with console.screen(style="on black"):
+            console.print("\n")
             console.print(Columns(panel, expand=False, equal=False))
             show_message("")

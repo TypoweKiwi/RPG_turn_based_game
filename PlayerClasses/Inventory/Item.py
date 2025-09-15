@@ -38,3 +38,6 @@ class Item:
     def get_prefix_raw_stats(self):
         return self.prefix_stats.get_item_stats_str
     
+    def __repr__(self):
+        return self.get_name()
+    

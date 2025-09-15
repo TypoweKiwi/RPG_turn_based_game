@@ -57,7 +57,7 @@ class Team:
         player.inventory.equip_item(item, self.stash)
         self.stash.items_list.remove(item)
     
-    def take_item_off(self, slot):
+    def take_item_off(self):
         player = self.choose_player()
         message = "From which slot do you wish to unequip item?"
         choices = [{"name": key.capitalize(), "value": key} for key in player.inventory.inventory_dict]

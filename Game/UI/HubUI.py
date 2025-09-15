@@ -10,6 +10,7 @@ class HubUI:
     def show_panel(self, panel):
         console = Console()
         with console.screen(style="on black"):
+            console.print("\n" * 2)
             console.print(Columns(panel, expand=False, equal=False))
             show_message("")
 
@@ -99,7 +100,7 @@ class HubUI:
         panel_lst = []
         for key in player.inventory.inventory_dict:
             item = player.inventory.inventory_dict[key] 
-            item_str = item.get_name+"\n"+item.get_item_stats_str if item else "No item"
+            item_str = f"[{item.rarity_color}]{item.get_name()}[/{item.rarity_color}]" +"\n" + item.get_item_stats_str() if item else "No item"
             panel_lst.append(Panel((item_str), title=key.capitalize()))
         self.show_panel(panel_lst)         
 
