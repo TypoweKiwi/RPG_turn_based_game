@@ -70,7 +70,18 @@ class AdventureHub:
         pass
 
     def open_stash(self):
-        pass
+        message = "Choose action"
+        choices = [
+            {"name": "View items in stash", "value": self.hub_ui.view_items},
+            {"name": "Sort/fitr viewed items", "value": self.players.stash.sort_stash},
+            {"name": "Change player inventory", "value": self.hub_ui.modify_player_inventory},
+            {"name": "Back", "value": None}
+        ]
+        while True:
+            choice = make_query(message, choices)
+            if not choice:
+                break
+            choice()
 
     def check_team_info(self):
         pass
@@ -89,7 +100,7 @@ class AdventureHub:
             {"name": "Start expedition", "value": self.start_adventure},
             {"name": "Visit wizard", "value": self.visit_wizard},
             {"name": "Visit shop", "value": self.open_shop},
-            {"name": "Open stash", "value": self.open_stash},
+            {"name": "Open stash/inventory", "value": self.open_stash},
             {"name": "Team recovery", "value": self.team_recovery},
             {"name": "Check team information", "value": self.check_team_info},
             {"name": "Recruit adventurer", "value": self.recruit_adventurer},
