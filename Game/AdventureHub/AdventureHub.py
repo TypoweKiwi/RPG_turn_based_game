@@ -35,9 +35,11 @@ class AdventureHub:
             presets[key]["cost"] = i*int(base_cost * (1 + self.players.get_team_level() ** 1.1))
         return presets
 
-    def choose_adventure(self):
+    def choose_adventure(self): #TODO Refactorize coode -> split function logic
         presets = self.generate_map_preset()
         preset = self.hub_ui.choose_map(presets)
+        if not preset:
+            return None
         while preset["cost"] > self.players.stash.wallet: #TODO payment class system
             show_message(f"You do not have enough gold to buy this map. \nCurrent gold: {self.players.stash.wallet} \nMap cost: {preset['cost']}")
             preset = self.hub_ui.choose_map(presets)
@@ -53,6 +55,8 @@ class AdventureHub:
     
     def start_adventure(self): #TODO check what happend if player dies during expedition
         map = self.choose_adventure()
+        if not map:
+            return None
         map.begin_adventure()
         if map.succes_flag:
             map.grant_rewards()

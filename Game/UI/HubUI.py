@@ -32,9 +32,10 @@ class HubUI:
         choices = [{"name": key.capitalize() + " dungeon", "value": presets[key]} for key in presets]
         message = "\nChoose on which adventure your team will go:"
         choices.append({"name": "Compare maps", "value": self.map_preset_comparission})
+        choices.append({"name": "Back", "value": None})
         while True: #TODO while true is not good practice, in future change this to more good looking and safe 
             preset = make_query(message=message, choices=choices)
-            if isinstance(preset, dict):
+            if isinstance(preset, dict) or not preset:
                 return preset
             preset(presets)
 
