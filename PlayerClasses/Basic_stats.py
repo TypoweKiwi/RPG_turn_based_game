@@ -5,7 +5,7 @@ cleric_stats_dict = {
     "max_mp": 60,
     "max_stamina": 40,
     "attack_damage": 5,
-    "ability_power": 15,
+    "ability_power": 15, 
     "critical_chance": 0,
     "speed": 4,
     "resistance": {

@@ -69,10 +69,7 @@ class HubUI:
             func(arg) if arg else func()
     
     def show_item_panel(self, item):
-        desc = item.desc
-        stats = item.get_item_stats_str()
-        item_panel = Panel((desc + "\n" + stats), title=f"[{item.rarity_color}]{item.get_name()}[/{item.rarity_color}]")
-        self.show_panel([item_panel])
+        self.show_panel([item.get_item_panel()])
 
     def item_options(self, item):
         message = "\nWhat would you do with this item?"

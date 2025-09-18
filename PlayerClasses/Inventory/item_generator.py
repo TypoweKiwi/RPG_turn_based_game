@@ -20,7 +20,8 @@ class Item_generator:
             "short" : (["Base", "Uncommon", "Rare"], [0.5, 0.3, 0.2,]),
             "medium": (["Base", "Uncommon", "Rare", "Epic"], [0.2, 0.45, 0.3, 0.05]),
             "long": (["Uncommon", "Rare", "Epic", "Legendary"], [0.2, 0.45, 0.3, 0.05]),
-            "boss": (["Rare", "Epic", "Legendary"], [0.25, 0.55, 0.2])
+            "boss": (["Rare", "Epic", "Legendary"], [0.25, 0.55, 0.2]),
+            "shop": (["Base", "Uncommon", "Rare", "Epic", "Legendary"],[0.4, 0.3, 0.2, 0.08, 0.02]) #There is also a seperate for shop loot table (only used by shop class)
         }
 
     def generate_item(self, difficulty_key, level, templates=(armor_templates_list + weapon_templates_list)):

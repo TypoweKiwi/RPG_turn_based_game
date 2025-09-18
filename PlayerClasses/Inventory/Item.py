@@ -1,4 +1,5 @@
 from PlayerClasses.Stats import Stats
+from rich.panel import Panel
 
 rarity_colors = { #Colors will be neded in diffrent UI classes thats why we define it global and use it in item class
     "Base": "white",
@@ -22,6 +23,12 @@ class Item:
         self.rarity_color = rarity_colors[rarity]
         self.prefix_name = prefix_dict["name"]
         self.prefix_stats = Stats(prefix_dict["basic_stat_dict"], level)
+    
+    def get_item_panel(self):
+        desc = self.desc
+        stats = self.get_item_stats_str()
+        item_panel = Panel((desc + "\n" + stats), title=f"[{self.rarity_color}]{self.get_name()}[/{self.rarity_color}]")
+        return item_panel
 
     def get_name(self):
         return self.prefix_name + self.name
