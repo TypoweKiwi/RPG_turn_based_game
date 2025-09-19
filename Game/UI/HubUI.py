@@ -14,7 +14,7 @@ class HubUI:
             console.print(Columns(panel, expand=False, equal=False))
             show_message("")
 
-    def map_preset_comparission(self, presets):
+    def map_preset_comparission(self):
         def get_preset_str(preset):
             return (
                 f"[blue]Room numbers[/blue]: {preset['max_steps']}\n"
@@ -24,20 +24,25 @@ class HubUI:
                 f"[yellow]Gold cost[/yellow]: {preset['cost']}"
             )
         
-        panel_lst = [Panel(get_preset_str(presets[key]), title=f"[cyan]{key.capitalize() + ' dungeon'}[/cyan]") for key in presets]
+        panel_lst = [Panel(get_preset_str(self.presets[key]), title=f"[cyan]{key.capitalize() + ' dungeon'}[/cyan]") for key in self.presets]
         self.show_panel(panel_lst)
     
 
     def choose_map(self, presets):
-        choices = [{"name": key.capitalize() + " dungeon", "value": presets[key]} for key in presets]
+        self.presets = presets
         message = "\nChoose on which adventure your team will go:"
+        choices = [{"name": key.capitalize() + " dungeon", "value": presets[key]} for key in presets]
         choices.append({"name": "Compare maps", "value": self.map_preset_comparission})
-        choices.append({"name": "Back", "value": None})
-        while True: #TODO while true is not good practice, in future change this to more good looking and safe 
+        choices.append({"name": "Back", "value": self.exit_view_panel})
+        self.view_status = True 
+        while self.view_status:
             preset = make_query(message=message, choices=choices)
-            if isinstance(preset, dict) or not preset:
-                return preset
-            preset(presets)
+            if isinstance(preset, dict):
+                if self.team.stash.wallet.try_payment(preset["cost"]):
+                    return preset
+            else:
+                preset()
+        return None
 
     def exit_view_panel(self):
         self.view_status = False

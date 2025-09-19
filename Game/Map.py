@@ -60,7 +60,7 @@ class Map:
         self.rewards["exp"] += int(base_exp * self.current_encounter.n_enemies * (self.team_level ** 1.2)) #we use team_level because monster levels are based on team level
 
     def grant_rewards(self):
-        self.players.stash.wallet += self.rewards["gold"]
+        self.players.stash.wallet.earn(self.rewards["gold"])
         for item in self.rewards["items"]:
             self.players.stash.add_item(item)
         for player in self.players.get_team_members():

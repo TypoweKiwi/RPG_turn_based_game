@@ -40,10 +40,6 @@ class AdventureHub:
         preset = self.hub_ui.choose_map(presets)
         if not preset:
             return None
-        while preset["cost"] > self.players.stash.wallet: #TODO payment class system
-            show_message(f"You do not have enough gold to buy this map. \nCurrent gold: {self.players.stash.wallet} \nMap cost: {preset['cost']}")
-            preset = self.hub_ui.choose_map(presets)
-        self.players.stash.wallet -= preset["cost"]
         return Map(
             players=self.players, 
             max_steps=preset["max_steps"],

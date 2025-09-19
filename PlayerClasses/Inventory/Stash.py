@@ -1,6 +1,7 @@
 from PlayerClasses.Inventory.Item_and_affixes_lists.armor_list import ItemType
 from PlayerClasses.Inventory.item_generator import rarity_affix
 from PlayerClasses.Stats import scaling_pattern
+from PlayerClasses.Wallet import Wallet
 from Game.UI.Choices_func import make_query, show_message
 
 class Stash:
@@ -8,7 +9,7 @@ class Stash:
         self.items_list = []
         self.filtered_items = self.items_list
         self.n_items_to_view = 5
-        self.wallet = 0 #TODO add wallet class 
+        self.wallet = Wallet()
     
     def add_item(self, item):
         self.items_list.append(item)
