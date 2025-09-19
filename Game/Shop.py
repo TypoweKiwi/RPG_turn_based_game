@@ -10,20 +10,20 @@ class Shop:
     def generate_stock(self):
         for i in range(self.size_of_stock):
             item = self.item_generator.generate_item(difficulty_key="shop", level=self.team.get_team_level())
-            stock_dict = {"price": 0, "item": item} #TODO item price
-            self.stock.append(stock_dict)
+            item.price = item.price*1.2 
+            self.stock.append(item)
 
     def refresh_shop(self):
         self.stock = []
         self.generate_stock()
     
     def buy_item(self, idx): #TODO add payment
-        item = self.stock[idx]["item"]
+        item = self.stock[idx]
         self.stock.remove(item)
         self.team.stash.add_item(item)
     
     def get_shop_panels(self):
         panels = []
-        for stock_dict in self.stock:
-            panels.append(stock_dict["item"].get_item_panel())
+        for item in self.stock:
+            panels.append(item.get_item_panel())
         return panels
