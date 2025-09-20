@@ -34,7 +34,8 @@ class Item:
 
         #Item price
         base = 300
-        self.value = base*rarity_factors[rarity]*(level**1.2)
+        self.price = base*rarity_factors[rarity]*(level**1.2)
+        self.base_price = self.price #Base price will be helpfull for shop, to recover orginal price after item is bought
     
     def get_item_panel(self):
         desc = self.desc

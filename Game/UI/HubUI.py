@@ -33,6 +33,7 @@ class HubUI:
         message = "\nChoose on which adventure your team will go:"
         choices = [{"name": key.capitalize() + " dungeon", "value": presets[key]} for key in presets]
         choices.append({"name": "Compare maps", "value": self.map_preset_comparission})
+        choices.append({"name": f"Current team gold: {self.team.stash.wallet.gold_value}", "value": lambda: None})
         choices.append({"name": "Back", "value": self.exit_view_panel})
         self.view_status = True 
         while self.view_status:

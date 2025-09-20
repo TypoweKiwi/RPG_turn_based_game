@@ -10,17 +10,21 @@ class Shop:
     def generate_stock(self):
         for i in range(self.size_of_stock):
             item = self.item_generator.generate_item(difficulty_key="shop", level=self.team.get_team_level())
-            item.price = item.price*1.2 
+            item.price = int(item.price*1.2) #We add 20% to the item price to make it more expensive
             self.stock.append(item)
 
     def refresh_shop(self):
-        self.stock = []
-        self.generate_stock()
+        refresh_price = 500*(self.team.get_team_level()**1.2)
+        if self.team.stash.wallet.try_payment(refresh_price):
+            self.stock = []
+            self.generate_stock()
     
-    def buy_item(self, idx): #TODO add payment
+    def buy_item(self, idx): 
         item = self.stock[idx]
-        self.stock.remove(item)
-        self.team.stash.add_item(item)
+        if self.team.stash.wallet.try_payment(item.price):
+            self.stock.remove(item)
+            item.price = item.base_price
+            self.team.stash.add_item(item)
     
     def get_shop_panels(self):
         panels = []
