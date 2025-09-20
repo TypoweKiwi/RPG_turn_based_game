@@ -1,14 +1,15 @@
 import math
 from Game.UI.HubUI import HubUI, make_query, show_message
 from Game.Map import Map
+from Game.Shop import Shop
 
 class AdventureHub:
-    def __init__(self, players, difficulty_factor=1):
+    def __init__(self, players):
         self.players = players
-        self.difficulty_factor = difficulty_factor #Implement difficulty_factor to options in games class let player choose difficulty of game :)
         self.n_completed_adventures = 0
         self.exit_flag = False
-        self.hub_ui = HubUI(players)
+        self.shop = Shop(self.players)
+        self.hub_ui = HubUI(self.players, self.shop)
     
     def make_decision(self):
         self.exit_flag = False 
@@ -49,21 +50,34 @@ class AdventureHub:
             difficulty_key= preset["difficulty_key"]
         )
     
-    def start_adventure(self): #TODO check what happend if player dies during expedition
+    def start_adventure(self):
         map = self.choose_adventure()
         if not map:
             return None
         map.begin_adventure()
         if map.succes_flag:
             map.grant_rewards()
+            self.shop.refresh_shop()
         else:
             self.exit_hub()
-
-    def visit_wizard(self):
-        pass
+    
+    def decision_loop(self, message, choices): #One of the choices need to have value None!
+        while True:
+            choice = make_query(message, choices)
+            if not choice:
+                break
+            choice()
 
     def open_shop(self):
-        pass
+        message = "Choose action"
+        choices = [
+            {"name": "Check stock", "value": self.hub_ui.check_stock},
+            {"name": "Buy item", "value": self.hub_ui.buy_item},
+            {"name": f"Refresh shop - cost: {self.shop.refresh_price}", "value": self.shop.buy_refresh_shop},
+            {"name": f"Current team gold: {self.players.stash.wallet.gold_value}", "value": lambda: None},
+            {"name": "Back", "value": None}
+        ]
+        self.decision_loop(message, choices)
 
     def open_stash(self):
         message = "Choose action"
@@ -73,11 +87,7 @@ class AdventureHub:
             {"name": "Change player inventory", "value": self.hub_ui.modify_player_inventory},
             {"name": "Back", "value": None}
         ]
-        while True:
-            choice = make_query(message, choices)
-            if not choice:
-                break
-            choice()
+        self.decision_loop(message, choices)
 
     def check_team_info(self):
         pass
@@ -94,7 +104,6 @@ class AdventureHub:
     def get_hub_options(self):
         choices = [
             {"name": "Start expedition", "value": self.start_adventure},
-            {"name": "Visit wizard", "value": self.visit_wizard},
             {"name": "Visit shop", "value": self.open_shop},
             {"name": "Open stash/inventory", "value": self.open_stash},
             {"name": "Team recovery", "value": self.team_recovery},

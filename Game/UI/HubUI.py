@@ -4,8 +4,9 @@ from rich.columns import Columns
 from rich.panel import Panel
 
 class HubUI:
-    def __init__(self, team):
+    def __init__(self, team, shop):
         self.team = team
+        self.shop = shop
     
     def show_panel(self, panel):
         console = Console()
@@ -107,6 +108,18 @@ class HubUI:
             item_str = f"[{item.rarity_color}]{item.get_name()}[/{item.rarity_color}]" +"\n" + item.get_item_stats_str() if item else "No item"
             panel_lst.append(Panel((item_str), title=key.capitalize()))
         self.show_panel(panel_lst)         
-
+    
+    def check_stock(self):
+        self.show_panel(self.shop.get_shop_panels())
+    
+    def buy_item(self):
+        message = "Choose item to buy: "
+        choices = [{"name": self.shop.stock[idx].get_name(), "value": (self.shop.buy_item, idx)} for idx in range(len(self.shop.stock))]
+        choices.append({"name": "Back", "value": None})
+        choice = make_query(message=message, choices=choices)
+        if choice:
+            func, arg = choice
+            func(arg)
+        
 
 

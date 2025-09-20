@@ -53,10 +53,12 @@ class Item:
         self.update_item(self.level + 1)
         self.upgrade_counter += 1
 
-    def get_item_panel(self):
+    def get_item_panel(self, shop=False):
         desc = self.desc
-        stats = self.get_item_stats_str()
-        panel_content = (desc + "\n" + stats + "\n" + f"Times upgraded: {self.upgrade_counter}/{self.max_upgrade_level}" + "\n" + f"Gold value: {self.price}")
+        stats_str = "\n" + self.get_item_stats_str()
+        gold_value_str = f"\n[yellow]Gold value[/yellow]: {self.price}" if not shop else f"\n[yellow]Price[/yellow]: {self.price}"
+        upgraded_str = f"\n[dark_magenta]Upgrades[/dark_magenta]: {self.upgrade_counter}/{self.max_upgrade_level}" if not shop else ""
+        panel_content = (desc  + stats_str +  upgraded_str + gold_value_str)
         item_panel = Panel((panel_content), title=f"[{self.rarity_color}]{self.get_name()}[/{self.rarity_color}]")
         return item_panel
 
