@@ -1,4 +1,5 @@
 from PlayerClasses.Inventory.item_generator import Item_generator
+from Game.UI.Choices_func import show_message
 
 class Shop:
     def __init__(self, team):
@@ -31,3 +32,13 @@ class Shop:
         for item in self.stock:
             panels.append(item.get_item_panel())
         return panels
+    
+    def upgrade_item(self, item):
+        if item.upgrade_counter >= item.max_upgrade_level:
+            show_message("Item is already at max upgrade level")
+            return None
+        upgraded_item_price = item.calculate_price(item.level + 1)
+        upgrade_cost = upgraded_item_price*0.5
+        if self.team.stash.wallet.try_payment(upgrade_cost):
+            item.upgrade()
+        

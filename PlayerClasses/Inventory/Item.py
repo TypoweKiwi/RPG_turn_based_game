@@ -25,6 +25,8 @@ class Item:
         self.slot = item_stats_dict["slot"]
         self.block_off_hand = item_stats_dict.get("block_off_hand", False)
         self.level = level
+        self.max_upgrade_level = 3
+        self.upgrade_counter = 0
 
         #Prefix and rarity
         self.rarity = rarity
@@ -33,14 +35,29 @@ class Item:
         self.prefix_stats = Stats(prefix_dict["basic_stat_dict"], level)
 
         #Item price
-        base = 300
-        self.price = base*rarity_factors[rarity]*(level**1.2)
+        self.price = self.calculate_price(self.level)
         self.base_price = self.price #Base price will be helpfull for shop, to recover orginal price after item is bought
     
+    def calculate_price(self, level):
+        base = 300
+        return base*rarity_factors[self.rarity]*(level**1.2)
+    
+    def update_item(self, level):
+        self.level = level
+        self.stats.update_stats(level)
+        self.prefix_stats.update_stats(level)
+        self.price = self.calculate_price(level)
+        self.base_price = self.price
+    
+    def upgrade(self):
+        self.update_item(self.level + 1)
+        self.upgrade_counter += 1
+
     def get_item_panel(self):
         desc = self.desc
         stats = self.get_item_stats_str()
-        item_panel = Panel((desc + "\n" + stats + "\n" + f"Gold value: {self.price}"), title=f"[{self.rarity_color}]{self.get_name()}[/{self.rarity_color}]")
+        panel_content = (desc + "\n" + stats + "\n" + f"Times upgraded: {self.upgrade_counter}/{self.max_upgrade_level}" + "\n" + f"Gold value: {self.price}")
+        item_panel = Panel((panel_content), title=f"[{self.rarity_color}]{self.get_name()}[/{self.rarity_color}]")
         return item_panel
 
     def get_name(self):
