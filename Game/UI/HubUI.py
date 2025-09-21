@@ -2,18 +2,12 @@ from rich.console import Console
 from Game.UI.Choices_func import make_query, show_message
 from rich.columns import Columns
 from rich.panel import Panel
+from Game.UI.CombatUI import CombatUI
 
-class HubUI:
-    def __init__(self, team, shop):
-        self.team = team
+class HubUI(CombatUI):
+    def __init__(self, players, shop):
+        super().__init__(players, enemies=None)
         self.shop = shop
-    
-    def show_panel(self, panel):
-        console = Console()
-        with console.screen(style="on black"):
-            console.print("\n" * 2)
-            console.print(Columns(panel, expand=False, equal=False))
-            show_message("")
 
     def map_preset_comparission(self):
         def get_preset_str(preset):

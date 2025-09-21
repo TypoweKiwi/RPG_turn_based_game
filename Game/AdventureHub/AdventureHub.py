@@ -5,11 +5,11 @@ from Game.Shop import Shop
 
 class AdventureHub:
     def __init__(self, players):
-        self.players = players
+        self.team = players
         self.n_completed_adventures = 0
         self.exit_flag = False
-        self.shop = Shop(self.players)
-        self.hub_ui = HubUI(self.players, self.shop)
+        self.shop = Shop(self.team)
+        self.hub_ui = HubUI(self.team, self.shop)
     
     def make_decision(self):
         self.exit_flag = False 
@@ -33,7 +33,7 @@ class AdventureHub:
             presets[key]["max_steps"] = base_steps + i*3
             presets[key]["safe_zones_number"] = i
             presets[key]["max_enemies"] = max_enemies
-            presets[key]["cost"] = i*int(base_cost * (1 + self.players.get_team_level() ** 1.1))
+            presets[key]["cost"] = i*int(base_cost * (1 + self.team.get_team_level() ** 1.1))
         return presets
 
     def choose_adventure(self): #TODO Refactorize coode -> split function logic
@@ -42,7 +42,7 @@ class AdventureHub:
         if not preset:
             return None
         return Map(
-            players=self.players, 
+            team=self.team, 
             max_steps=preset["max_steps"],
             safe_zones_number=preset["safe_zones_number"],
             max_enemies=preset["max_enemies"],
@@ -74,7 +74,7 @@ class AdventureHub:
             {"name": "Check stock", "value": self.hub_ui.check_stock},
             {"name": "Buy item", "value": self.hub_ui.buy_item},
             {"name": f"Refresh shop - cost: {self.shop.refresh_price}", "value": self.shop.buy_refresh_shop},
-            {"name": f"Current team gold: {self.players.stash.wallet.gold_value}", "value": lambda: None},
+            {"name": f"Current team gold: {self.team.stash.wallet.gold_value}", "value": lambda: None},
             {"name": "Back", "value": None}
         ]
         self.decision_loop(message, choices)
@@ -83,14 +83,21 @@ class AdventureHub:
         message = "Choose action"
         choices = [
             {"name": "View items in stash", "value": self.hub_ui.view_items},
-            {"name": "Sort/fitr viewed items", "value": self.players.stash.sort_stash},
+            {"name": "Sort/fitr viewed items", "value": self.team.stash.sort_stash},
             {"name": "Change player inventory", "value": self.hub_ui.modify_player_inventory},
             {"name": "Back", "value": None}
         ]
         self.decision_loop(message, choices)
 
     def check_team_info(self):
-        pass
+        message = "Choose action"
+        choices = [
+            {"name": "Check team stats", "value": self.hub_ui.show_vital_stats},
+            {"name": "Check team resistances", "value": self.hub_ui.show_resistances},
+            {"name": "Check team skills", "value": lambda: self.hub_ui.show_skills(self.team.choose_player())},
+            {"name": "Back", "value": None}
+        ]
+        self.decision_loop(message, choices)
 
     def team_recovery(self):
         pass

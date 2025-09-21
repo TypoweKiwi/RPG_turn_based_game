@@ -3,7 +3,7 @@ from PlayerClasses.Inventory.item_generator import Item_generator
 import random
 
 class Map:
-    def __init__(self, players, difficulty_key, max_steps=3, safe_zones_number = 0, max_enemies = 3, boss=False):
+    def __init__(self, team, difficulty_key, max_steps=3, safe_zones_number = 0, max_enemies = 3, boss=False):
         #Map specifications
         self.max_steps = max_steps
         self.safe_zones = []
@@ -13,11 +13,11 @@ class Map:
         self.current_encounter = None
         
         #Team
-        self.players = players
+        self.team = team
 
         #Rewards and difficulty
         self.succes_flag = False
-        self.team_level = self.players.get_team_level()
+        self.team_level = self.team.get_team_level()
         self.difficulty_key = difficulty_key
         self.item_generator = Item_generator()
         self.rewards = {
@@ -40,8 +40,8 @@ class Map:
     def begin_adventure(self): 
         self.generate_rooms()
         for key in self.rooms_dict:
-            if self.players:
-                self.current_encounter = self.rooms_dict[key](self.players, max_enemies=self.max_enemies, room_number=key, team_level=self.team_level) 
+            if self.team:
+                self.current_encounter = self.rooms_dict[key](self.team, max_enemies=self.max_enemies, room_number=key, team_level=self.team_level) 
                 self.current_encounter.begin_encounter()
                 self.generate_rewards()
             else:
@@ -60,10 +60,10 @@ class Map:
         self.rewards["exp"] += int(base_exp * self.current_encounter.n_enemies * (self.team_level ** 1.2)) #we use team_level because monster levels are based on team level
 
     def grant_rewards(self):
-        self.players.stash.wallet.earn(self.rewards["gold"])
+        self.team.stash.wallet.earn(self.rewards["gold"])
         for item in self.rewards["items"]:
-            self.players.stash.add_item(item)
-        for player in self.players.get_team_members():
+            self.team.stash.add_item(item)
+        for player in self.team.get_team_members():
             player.gain_exp(self.rewards["exp"])
     
     def __eq__(self, other):
