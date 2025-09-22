@@ -1,7 +1,8 @@
 import math
-from Game.UI.HubUI import HubUI, make_query, show_message
+from Game.UI.HubUI import HubUI, make_query
 from Game.Map import Map
 from Game.Shop import Shop
+from Game.Temple import Temple
 
 class AdventureHub:
     def __init__(self, players):
@@ -10,6 +11,7 @@ class AdventureHub:
         self.exit_flag = False
         self.shop = Shop(self.team)
         self.hub_ui = HubUI(self.team, self.shop)
+        self.temple = Temple(self.team)
     
     def make_decision(self):
         self.exit_flag = False 
@@ -58,6 +60,7 @@ class AdventureHub:
         if map.succes_flag:
             map.grant_rewards()
             self.shop.refresh_shop()
+            self.temple.update_cost()
         else:
             self.exit_hub()
     
@@ -99,8 +102,14 @@ class AdventureHub:
         ]
         self.decision_loop(message, choices)
 
-    def team_recovery(self):
-        pass
+    def visit_temple(self):
+        message = "Choose action"
+        choices = [
+            {"name": "Heal team", "value": self.temple.heal_team},
+            {"name": "Recover team mana", "value": self.temple.recover_team_mana},
+            {"name": "Back", "value": None}
+        ]
+        self.decision_loop(message, choices)
 
     def recruit_adventurer(self):
         pass
@@ -113,7 +122,7 @@ class AdventureHub:
             {"name": "Start expedition", "value": self.start_adventure},
             {"name": "Visit shop", "value": self.open_shop},
             {"name": "Open stash/inventory", "value": self.open_stash},
-            {"name": "Team recovery", "value": self.team_recovery},
+            {"name": "Team recovery", "value": self.visit_temple},
             {"name": "Check team information", "value": self.check_team_info},
             {"name": "Recruit adventurer", "value": self.recruit_adventurer},
             {"name": "Exit to menu", "value": self.exit_hub}

@@ -19,9 +19,9 @@ class Shop:
     def refresh_shop(self):
         self.stock = []
         self.generate_stock()
+        self.refresh_price = 500*(self.team.get_team_level()**1.2)
 
     def buy_refresh_shop(self):
-        self.refresh_price = 500*(self.team.get_team_level()**1.2)
         if self.team.stash.wallet.try_payment(self.refresh_price):
             self.refresh_shop()
     

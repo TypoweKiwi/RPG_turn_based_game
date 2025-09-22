@@ -2,10 +2,10 @@ from DamageCalculations.Type import DamageType
 
 cleric_stats_dict = {
     "max_hp": 100,
-    "max_mp": 60,
+    "max_mp": 602222222,
     "max_stamina": 40,
     "attack_damage": 5,
-    "ability_power": 15, 
+    "ability_power": 152222222, 
     "critical_chance": 0,
     "speed": 4,
     "resistance": {

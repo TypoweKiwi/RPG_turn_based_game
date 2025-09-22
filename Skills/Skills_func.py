@@ -25,7 +25,7 @@ def heal_func(stats_dict, target, skill_dict):
     ability_power = stats_dict[scalling_dict["type"]]
     base = scalling_dict["base"]
     heal_amount = base*int(ability_power*scalling_dict["factor"])
-    target.health_points = min(target.max_hp, target.health_points + heal_amount)
+    target.stats.health_points = min(target.stats.max_hp, target.stats.health_points + heal_amount)
     print(f"{target.name} was healed {heal_amount} HP")
 
 def prayer_func(stats_dict, targets, skill_dict):

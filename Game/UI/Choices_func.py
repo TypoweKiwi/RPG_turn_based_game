@@ -21,3 +21,7 @@ def choose_targets(enemies, n_targets):
         remaining_enemies.remove(target)
 
     return targets
+
+def choose_options(message, choices):
+    choices = inquirer.checkbox(message=message, choices=choices).execute()
+    return choices 
