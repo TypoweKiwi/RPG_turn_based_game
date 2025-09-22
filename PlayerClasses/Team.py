@@ -55,6 +55,7 @@ class Team:
     def equip_item(self, item):
         player = self.choose_player()
         player.inventory.equip_item(item, self.stash)
+        player.recalculate_stats()
         self.stash.items_list.remove(item)
     
     def take_item_off(self):
@@ -63,6 +64,7 @@ class Team:
         choices = [{"name": key.capitalize(), "value": key} for key in player.inventory.inventory_dict]
         slot = make_query(message, choices)
         player.inventory.take_item_off(slot, self.stash)
+        player.recalculate_stats()
 
     def __add__(self, other):
         if isinstance(other, Team):
