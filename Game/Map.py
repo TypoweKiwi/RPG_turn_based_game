@@ -1,4 +1,5 @@
 from Game.Encounter.Encounter import HostileEncounter, SafeEncounter, BossEncounter
+from Game.UI.Choices_func import show_message
 from PlayerClasses.Inventory.item_generator import Item_generator
 import random
 
@@ -48,17 +49,29 @@ class Map:
                 return None
         self.succes_flag = True
     
-    def generate_rewards(self): #TODO message about loot found
+    def generate_rewards(self):
+        if not self.team:
+            return None
+        current_rewards = {}
         #Gold
         base_gold = 150
-        self.rewards["gold"] += int(base_gold * (self.team_level ** 1.2) * random.uniform(0.8, 1.2))
+        earned_gold = int(base_gold * (self.team_level ** 1.2) * random.uniform(0.8, 1.2))
+        self.rewards["gold"] += earned_gold
+        current_rewards["gold"] = earned_gold
         #Item
         ticket = random.random()
-        self.rewards["items"].append(self.item_generator.generate_item(difficulty_key=self.difficulty_key, level=self.team_level)) if ticket > 0.5 else None
+        if ticket > 0.5:
+            item = self.item_generator.generate_item(difficulty_key=self.difficulty_key, level=self.team_level) 
+            self.rewards["items"].append(item)
+            current_rewards["items"] = [item]
         #Exp
         base_exp = 50
-        self.rewards["exp"] += int(base_exp * self.current_encounter.n_enemies * (self.team_level ** 1.2)) #we use team_level because monster levels are based on team level
+        earned_exp = int(base_exp * self.current_encounter.n_enemies * (self.team_level ** 1.2)) #we use team_level because monster levels are based on team level
+        self.rewards["exp"] += earned_exp
+        current_rewards["exp"] = earned_exp
 
+        self.check_rewards(current_rewards, message="Your rewards after completing room:\n")
+        
     def grant_rewards(self):
         self.team.stash.wallet.earn(self.rewards["gold"])
         for item in self.rewards["items"]:
@@ -66,5 +79,15 @@ class Map:
         for player in self.team.get_team_members():
             player.gain_exp(self.rewards["exp"])
     
+    def check_rewards(self, rewards=None, message="Your all rewards after the adventure:\n"):
+        if not rewards:
+            rewards = self.rewards
+        gold = str(rewards["gold"])
+        items_lst = [item.get_name() for item in rewards.get("items", [])]
+        item_lst = ", ".join(items_lst)
+        exp = str(rewards["exp"])
+        rewards_str = f"Items: {item_lst}\nGold: {gold}\nExp: {exp}"
+        show_message(message + rewards_str)
+        
     def __eq__(self, other):
         return isinstance(other, Map) and self.__dict__ == other.__dict__
