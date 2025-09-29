@@ -1,6 +1,6 @@
 from InquirerPy import inquirer
 
-def make_query(message, choices):
+def make_query(message="Choose action: ", choices=[]):
     choice = inquirer.select(
             message=message,
             choices= choices,

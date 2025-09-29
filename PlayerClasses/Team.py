@@ -8,7 +8,7 @@ class Team:
         self._players = []
         self.stash = Stash()
 
-    def add_player(self, player):
+    def add_player(self, player): #TODO refactorize add_player 
         if len(self._players) < 4:
             self._players.append(player)
             return True

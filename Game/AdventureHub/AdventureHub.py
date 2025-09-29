@@ -3,6 +3,7 @@ from Game.UI.HubUI import HubUI, make_query
 from Game.Map import Map
 from Game.Shop import Shop
 from Game.Temple import Temple
+from Game.Tavern import Tavern
 
 class AdventureHub:
     def __init__(self, players):
@@ -12,6 +13,7 @@ class AdventureHub:
         self.shop = Shop(self.team)
         self.hub_ui = HubUI(self.team, self.shop)
         self.temple = Temple(self.team)
+        self.tavern = Tavern(self.team)
     
     def make_decision(self):
         self.exit_flag = False 
@@ -52,6 +54,11 @@ class AdventureHub:
             difficulty_key= preset["difficulty_key"]
         )
     
+    def update_hub(self):
+        self.shop.refresh_shop()
+        self.temple.update_cost()
+        self.tavern.refresh_adventurer_list()
+
     def start_adventure(self):
         map = self.choose_adventure()
         if not map:
@@ -59,20 +66,18 @@ class AdventureHub:
         map.begin_adventure()
         if map.succes_flag:
             map.grant_rewards()
-            self.shop.refresh_shop()
-            self.temple.update_cost()
+            self.update_hub()
         else:
             self.exit_hub()
     
-    def decision_loop(self, message, choices): #One of the choices need to have value None!
+    def decision_loop(self,  choices): #One of the choices need to have value None!
         while True:
-            choice = make_query(message, choices)
+            choice = make_query(choices=choices)
             if not choice:
                 break
             choice()
 
     def open_shop(self):
-        message = "Choose action"
         choices = [
             {"name": "Check stock", "value": self.hub_ui.check_stock},
             {"name": "Buy item", "value": self.hub_ui.buy_item},
@@ -80,39 +85,41 @@ class AdventureHub:
             {"name": f"Current team gold: {self.team.stash.wallet.gold_value}", "value": lambda: None},
             {"name": "Back", "value": None}
         ]
-        self.decision_loop(message, choices)
+        self.decision_loop(choices=choices)
 
     def open_stash(self):
-        message = "Choose action"
         choices = [
             {"name": "View items in stash", "value": self.hub_ui.view_items},
             {"name": "Sort/fitr viewed items", "value": self.team.stash.sort_stash},
             {"name": "Change player inventory", "value": self.hub_ui.modify_player_inventory},
             {"name": "Back", "value": None}
         ]
-        self.decision_loop(message, choices)
+        self.decision_loop(choices=choices)
 
     def check_team_info(self):
-        message = "Choose action"
         choices = [
             {"name": "Check team stats", "value": self.hub_ui.show_vital_stats},
             {"name": "Check team resistances", "value": self.hub_ui.show_resistances},
             {"name": "Check team skills", "value": lambda: self.hub_ui.show_skills(self.team.choose_player())},
             {"name": "Back", "value": None}
         ]
-        self.decision_loop(message, choices)
+        self.decision_loop(choices=choices)
 
     def visit_temple(self):
-        message = "Choose action"
         choices = [
             {"name": "Heal team", "value": self.temple.heal_team},
             {"name": "Recover team mana", "value": self.temple.recover_team_mana},
             {"name": "Back", "value": None}
         ]
-        self.decision_loop(message, choices)
+        self.decision_loop(choices=choices)
 
-    def recruit_adventurer(self):
-        pass
+    def visit_tavern(self):
+        choices = [
+            {"name": "Recruit adventurer", "value": self.tavern.recruit_adventurer},
+            {"name": "Retire the adventurer", "value": self.tavern.retire_adventurer},
+            {"name": "Back", "value": None}
+        ]
+        self.decision_loop(choices=choices)
 
     def exit_hub(self):
         self.exit_flag = True
@@ -124,7 +131,7 @@ class AdventureHub:
             {"name": "Open stash/inventory", "value": self.open_stash},
             {"name": "Team recovery", "value": self.visit_temple},
             {"name": "Check team information", "value": self.check_team_info},
-            {"name": "Recruit adventurer", "value": self.recruit_adventurer},
+            {"name": "Visit tavern", "value": self.visit_tavern},
             {"name": "Exit to menu", "value": self.exit_hub}
         ]
         return choices

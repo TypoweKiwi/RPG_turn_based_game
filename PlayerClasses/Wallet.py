@@ -10,7 +10,7 @@ class Wallet:
     def earn(self, amount):
         self.gold_value += amount
     
-    def try_payment(self, value=None):
+    def try_payment(self, value):
         if self.gold_value >= value:
             self.pay(value)
             show_message(f"You have successfully made this transaction.\nCurrent gold after transaction: {self.gold_value}")

@@ -8,7 +8,7 @@ class Temple:
     def update_cost(self):
         self.recover_cost = 100*(self.team.get_team_level()**1.2)
     
-    def heal(self, players):
+    def heal(self, players): #TODO encapsulate healing and mana
         for player in players:
             player.stats.health_points = player.stats.max_hp
 

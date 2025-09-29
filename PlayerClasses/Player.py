@@ -87,6 +87,12 @@ class Player:
             skill_index = self.skills.index(skill)
             self.skills[skill_index] = Skill(skill_dict=skill_dict)
     
+    def get_name(self):
+        return self.name
+
+    def get_level(self):
+        return self.level
+    
     def gets_stats_str(self):
         return self.stats.get_stats_str()
 
