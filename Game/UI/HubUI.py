@@ -114,6 +114,8 @@ class HubUI(CombatUI):
         if choice:
             func, arg = choice
             func(arg)
-        
+    
+    def __eq__(self, other):
+        return isinstance(other, HubUI) and self.__dict__ == other.__dict__
 
 

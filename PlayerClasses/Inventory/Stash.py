@@ -1,5 +1,6 @@
 from PlayerClasses.Inventory.Item_and_affixes_lists.armor_list import ItemType
 from PlayerClasses.Inventory.item_generator import rarity_affix
+from PlayerClasses.Inventory.Item import Item
 from PlayerClasses.Stats import scaling_pattern
 from PlayerClasses.Wallet import Wallet
 from Game.UI.Choices_func import make_query, show_message
@@ -62,3 +63,19 @@ class Stash:
 
     def clear_filter(self):
         self.filtered_items = self.items_list
+    
+    def __eq__(self, other):
+        return isinstance(other, Stash) and self.__dict__ == other.__dict__
+    
+    def to_save_dict(self):
+        return {
+            "items": [item.to_save_dict() for item in self.items_list],
+            "wallet": self.wallet.to_save_dict()
+        }
+    
+    def load_save_dict(self, save_dict):
+        for item_save_dict in save_dict["items"]:
+            item = Item(item_stats_dict={})
+            item.load_save_dict(item_save_dict)
+            self.add_item(item)
+        self.wallet.load_save_dict(save_dict["wallet"])

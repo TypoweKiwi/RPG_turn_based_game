@@ -1,5 +1,6 @@
 from Game.UI.Choices_func import make_query, show_message
 from PlayerClasses.Inventory.Item_and_affixes_lists.armor_list import ItemType
+from PlayerClasses.Inventory.Item import Item
 from PlayerClasses.Stats import Stats
 
 class Inventory:
@@ -15,12 +16,14 @@ class Inventory:
             ItemType.main_hand.name: None,
             ItemType.off_hand.name: None
         }
-        self.equip_action_dict = {
+        self.temporary_stash = []
+    
+    def get_equip_action_dict(self):
+        return {
             ItemType.ring.name: self.equip_ring,
             ItemType.main_hand.name: self.equip_main_hand,
             ItemType.off_hand.name: self.equip_off_hand,
         }
-        self.temporary_stash = []
 
     def transfer_to_stash(self, stash):
         for item in self.temporary_stash:
@@ -28,7 +31,8 @@ class Inventory:
         self.temporary_stash = []
 
     def equip_item(self, item, stash):
-        action = self.equip_action_dict.get(item.slot, self.equip_item_on_slot)
+        action_dict = self.get_equip_action_dict()
+        action = action_dict.get(item.slot, self.equip_item_on_slot)
         action(item)
         self.transfer_to_stash(stash)
     
@@ -73,4 +77,35 @@ class Inventory:
                 sum_stats += self.inventory_dict[key].get_stats_to_calculate()
         return sum_stats
     
+    def __eq__(self, other):
+        if not isinstance(other, Inventory):
+            return False
+        
+        differences = []
+        for key in self.__dict__:
+            self_val = self.__dict__[key]
+            other_val = getattr(other, key, None)
+            if self_val != other_val:
+                differences.append((key, self_val, other_val))
+        
+        if differences:
+            print("Players are not equal. Differences:")
+            for key, self_val, other_val in differences:
+                print(f"Field '{key}': self={self_val} | other={other_val}")
+            return False
+        
+        return True
+    
+    def to_save_dict(self):
+        save_dict = {}
+        for key in self.inventory_dict:
+            if self.inventory_dict[key] != None:
+                save_dict[key] = self.inventory_dict[key].to_save_dict()
+        return save_dict
+    
+    def load_save_dict(self, save_dict):
+        for key in save_dict:
+            item = Item({})
+            item.load_save_dict(save_dict[key])
+            self.inventory_dict[key] = item
 

@@ -18,3 +18,12 @@ class Wallet:
         else:
             show_message(f"You do not have enough gold to make this transaction.\nCurrent gold: {self.gold_value}\nPayment cost: {value}")
             return False
+    
+    def __eq__(self, other):
+        return isinstance(other, Wallet) and self.__dict__ == other.__dict__
+
+    def to_save_dict(self):
+        return self.__dict__
+    
+    def load_save_dict(self, save_dict):
+        self.__dict__ = save_dict

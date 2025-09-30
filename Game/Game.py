@@ -3,10 +3,9 @@ from PlayerClasses.Team import Team
 from Game.AdventureHub.AdventureHub import AdventureHub
 from enum import Enum
 from Game.UI.Choices_func import make_query, show_message
-from Game.Saves.Saves_game_func import save_game, return_save_name, save_path
-from Game.Saves.Load_game_func import load_game
 import datetime
-import os 
+import os
+import json
 
 
 class Game_state(Enum):
@@ -17,9 +16,9 @@ class Game_state(Enum):
 
 class Game:
     def __init__(self):
-        self.players = None #TODO check if there is point in keeping players in game class
         self.adventure_hub = None 
         self.state = Game_state.idle
+        self.save_path = os.path.join("Game", "Saves") 
         self.menu_choices = [
             {"name": "Start new game", "value": self.create_new_game},
             {"name": "Load game", "value": self.load_game_state},
@@ -56,31 +55,38 @@ class Game:
     def create_new_game(self): 
         team_name = input("Write your team name: ")
         n_team = make_query("Chose your team size: ", [1, 2, 3, 4])
-        self.players = Team(name=team_name)
+        team = Team(name=team_name)
         for i in range(n_team):
             choice = make_query(f"Chose your {i+1} team member:", [element for element in classes])
             print(f"Your choice: {choice}")
-            self.players.add_player(classes[choice]())
+            team.add_player(classes[choice]())
         
-        self.adventure_hub = AdventureHub(players=self.players)
+        self.adventure_hub = AdventureHub(team=team)
         self.state = Game_state.running
         self.unlock_menu_options()
+        print(self.adventure_hub.__dict__)
     
     def save_game_state(self): 
-        save_name = "Team." + self.players.name + "." + datetime.datetime.now().strftime('%d-%m-%Y_%H-%M-%S') + ".txt"
-        save_game(save_name, self.players, self.map) 
+        save_name = "Team." + self.adventure_hub.team.name + "." + datetime.datetime.now().strftime('%d-%m-%Y_%H-%M-%S') + ".txt"
+        save_name = os.path.join(self.save_path, save_name)
+        save_dict = self.adventure_hub.to_save_dict()
+        with open(save_name, "w") as file:
+            json.dump(save_dict, file) 
         show_message("Game saved successfully.")
-        self.step_menu()
 
     def load_game_state(self):
-        saves_lst = [{"name": return_save_name(save), "value": save} for save in os.listdir(save_path) if save.endswith(".txt")]
+        def return_save_name(save_name):
+            save_parts = save_name.split(".")
+            return "Team: " + save_parts[1] + " Date: " + save_parts[2]
+        saves_lst = [{"name": return_save_name(save), "value": save} for save in os.listdir(self.save_path) if save.endswith(".txt")]
         saves_lst.append({"name": "Back", "value": None})
         choice = make_query(message="Which save you wish to load?", choices=saves_lst)
-        if choice is None:
-            self.start_menu()
-        else: 
-            self.map = load_game(save_name=choice)
-            self.players = map.players
+        if choice:
+            save_name = os.path.join(self.save_path, choice)
+            with open(save_name, "r") as file:
+                save_dict = json.load(file) 
+            self.adventure_hub = AdventureHub(team=Team(""))
+            self.adventure_hub.load_save_dict(save_dict)
             show_message("Game loaded successfully.")
             self.state = Game_state.running
             self.unlock_menu_options()

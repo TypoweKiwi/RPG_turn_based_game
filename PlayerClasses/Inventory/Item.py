@@ -18,11 +18,11 @@ rarity_factors = {
 }
 
 class Item:
-    def __init__(self, item_stats_dict, prefix_dict, level=1, rarity="Base"):
-        self.name = item_stats_dict["name"]
-        self.desc = item_stats_dict["desc"]
-        self.stats = Stats(item_stats_dict["basic_stat_dict"], level)
-        self.slot = item_stats_dict["slot"]
+    def __init__(self, item_stats_dict, prefix_dict={}, level=1, rarity="Base"):
+        self.name = item_stats_dict.get("name", "")
+        self.desc = item_stats_dict.get("desc", "")
+        self.stats = Stats(item_stats_dict.get("basic_stat_dict", {}), level)
+        self.slot = item_stats_dict.get("slot", "")
         self.block_off_hand = item_stats_dict.get("block_off_hand", False)
         self.level = level
         self.max_upgrade_level = 3
@@ -31,8 +31,8 @@ class Item:
         #Prefix and rarity
         self.rarity = rarity
         self.rarity_color = rarity_colors[rarity]
-        self.prefix_name = prefix_dict["name"]
-        self.prefix_stats = Stats(prefix_dict["basic_stat_dict"], level)
+        self.prefix_name = prefix_dict.get("name", "")
+        self.prefix_stats = Stats(prefix_dict.get("basic_stat_dict", {}), level)
 
         #Item price
         self.price = self.calculate_price(self.level)
@@ -75,8 +75,32 @@ class Item:
         return self.stats.get_item_stats_str()
     
     def get_prefix_raw_stats(self):
-        return self.prefix_stats.get_item_stats_str
+        return self.prefix_stats.get_item_stats_str()
     
     def __repr__(self):
         return self.get_name()
     
+    def __eq__(self, other):
+        return isinstance(other, Item) and self.__dict__ == other.__dict__
+    
+    def to_save_dict(self):
+        save_dict = self.__dict__.copy()
+        save_dict["stats"] = self.stats.to_save_dict()
+        save_dict["prefix_stats"] = self.prefix_stats.to_save_dict()
+        return save_dict
+    
+    def load_save_dict(self, save_dict):
+        self.name = save_dict["name"]
+        self.desc = save_dict["desc"]
+        self.stats.load_save_dict(save_dict["stats"])
+        self.slot = save_dict["slot"]
+        self.block_off_hand = save_dict["block_off_hand"]
+        self.level = save_dict["level"]
+        self.max_upgrade_level = save_dict["max_upgrade_level"]
+        self.upgrade_counter = save_dict["upgrade_counter"]
+        self.rarity = save_dict["rarity"]
+        self.rarity_color = save_dict["rarity_color"]
+        self.prefix_name = save_dict["prefix_name"]
+        self.prefix_stats.load_save_dict(save_dict["prefix_stats"])
+        self.price = save_dict["price"]
+        self.base_price = save_dict["base_price"]

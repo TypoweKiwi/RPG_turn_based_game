@@ -42,4 +42,7 @@ class Item_generator:
 
     def generate_armor(self, difficulty_key, level, templates=armor_templates_list):
         return self.generate_item(difficulty_key, level, templates)
+    
+    def __eq__(self, other):
+        return isinstance(other, Item_generator) and self.__dict__ == other.__dict__
 

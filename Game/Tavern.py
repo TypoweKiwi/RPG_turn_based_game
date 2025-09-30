@@ -1,5 +1,6 @@
 from Game.UI.Choices_func import show_message, make_query
 from PlayerClasses.Classes import classes
+from PlayerClasses.Player import Player
 import random
 
 class Tavern():
@@ -45,3 +46,37 @@ class Tavern():
         choice = make_query(message=f"Are you sure you want to retire {player.get_name()}?", choices=["Yes", "No"])
         if choice == "Yes":
             self.team.remove_player(player)
+    
+    def __eq__(self, other):
+        if not isinstance(other, Tavern):
+            return False
+        
+        differences = []
+        for key in self.__dict__:
+            self_val = self.__dict__[key]
+            other_val = getattr(other, key, None)
+            if self_val != other_val:
+                differences.append((key, self_val, other_val))
+        
+        if differences:
+            print("Tavern are not equal. Differences:")
+            for key, self_val, other_val in differences:
+                print(f"Field '{key}': self={self_val} | other={other_val}")
+            return False
+        
+        return True
+    
+    def to_save_dict(self):
+        save_dict = {}
+        save_dict["cost"] = self.cost
+        save_dict["adventurers_list"] = [adventurer.to_save_dict() for adventurer in self.adventurers_list]
+        return save_dict
+    
+    def load_save_dict(self, save_dict):
+        self.cost = save_dict["cost"]
+        self.adventurers_list = []
+        for adventurer_save_dict in save_dict["adventurers_list"]:
+            adventurer = Player(name="", basic_stat_dict={})
+            adventurer.load_save_dict(adventurer_save_dict)
+            self.adventurers_list.append(adventurer)
+        

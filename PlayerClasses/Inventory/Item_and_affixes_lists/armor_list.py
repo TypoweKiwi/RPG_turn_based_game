@@ -60,7 +60,7 @@ priest_hat_dict = {
     "basic_stat_dict": {
         "max_hp" : 5,
         "max_mp": 10,
-        "resistance" : {DamageType.physical.name: 2, DamageType.holy.name: 2, DamageType.elemental: 2}
+        "resistance" : {DamageType.physical.name: 2, DamageType.holy.name: 2, DamageType.elemental.name: 2}
     }
 }
 

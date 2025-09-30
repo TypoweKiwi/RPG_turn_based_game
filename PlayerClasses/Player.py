@@ -1,7 +1,7 @@
 from DamageCalculations.Reducing_damage import reduce_dmg
 from Game.UI.Choices_func import make_query
 from Skills.Skill import Skill
-from Skills.Skills_list import Skill_cost_type
+from Skills.Skills_list import Skill_cost_type, skill_list
 from PlayerClasses.Inventory.Inventory import Inventory
 from PlayerClasses.Stats import Stats
 from rich.panel import Panel
@@ -118,3 +118,35 @@ class Player:
     
     def __repr__(self):
         return self.name
+    
+    def to_save_dict(self):
+        save_dict = {}
+        save_dict["name"] = self.name
+        save_dict["hostile"] = self.hostile
+        save_dict["level"] = self.level
+        save_dict["current_exp"] = self.current_exp
+        save_dict["required_exp"] = self.required_exp
+        save_dict["base_stats"] = self.base_stats.to_save_dict()
+        save_dict["stats"] = self.stats.to_save_dict()
+        save_dict["inventory"] = self.inventory.to_save_dict()
+        save_dict["skills"] = [skill.to_save_dict() for skill in self.skills]
+        return save_dict
+    
+    def load_save_dict(self, save_dict):
+        self.name = save_dict["name"]
+        self.hostile = save_dict["hostile"]
+        self.level = save_dict["level"]
+        self.current_exp = save_dict["current_exp"]
+        self.required_exp = save_dict["required_exp"]
+        self.base_stats.load_save_dict(save_dict["base_stats"])
+        self.stats.load_save_dict(save_dict["stats"])
+        self.inventory.load_save_dict(save_dict["inventory"])
+        for skill_save_dict in save_dict["skills"]:
+            for skill_dict in skill_list:
+                if skill_dict["name"] == skill_save_dict["name"]:
+                    skill = Skill(skill_dict=skill_dict)
+                    self.skills.append(skill)
+                    break
+        
+
+            

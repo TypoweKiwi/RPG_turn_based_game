@@ -53,3 +53,6 @@ class Skill():
     
     def __str__(self):
         return f"{self.name} | {self.skill_type.name} | {self.cost} {self.cost_type.value}"
+    
+    def to_save_dict(self):
+        return {"name": self.name}

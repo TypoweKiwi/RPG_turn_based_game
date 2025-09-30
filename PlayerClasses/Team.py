@@ -36,17 +36,11 @@ class Team:
             panel_lst.append(Panel(stats_str, title=f"[{color}]{player.name}[/{color}]"))
         return panel_lst
     
-    def add_gold(self, amount):
-        self.wallet += amount
-    
-    def remove_gold(self, amount):
-        self.wallet -= amount
-    
     def get_team_level(self):
         sum_level = 0
         for player in self._players:
             sum_level += player.level
-        return int(sum_level/len(self._players))
+        return int(sum_level/len(self._players)) if self._players else 1
 
     def choose_player(self):
         message = "On which character you wish to perform action?"
@@ -91,3 +85,18 @@ class Team:
 
     def __repr__(self):
         return f"Team(name={self.name}, players={self._players})"
+
+    def to_save_dict(self):
+        return {
+            "name": self.name,
+            "players": [player.to_save_dict() for player in self._players],
+            "stash": self.stash.to_save_dict()
+        }
+    
+    def load_save_dict(self, save_dict):
+        self.name = save_dict["name"]
+        for player_save_dict in save_dict["players"]:
+            player = Player(name="", basic_stat_dict={})
+            player.load_save_dict(player_save_dict)
+            self.add_player(player)
+        self.stash.load_save_dict(save_dict["stash"])

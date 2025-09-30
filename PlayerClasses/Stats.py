@@ -43,7 +43,7 @@ class Stats:
         self.speed = self.calculate_stat_value("speed", level)
 
     def get_current_stats_percintile(self):
-        hp_percintile = self.health_points/self.max_hp 
+        hp_percintile = self.health_points/self.max_hp if self.max_hp > 1 else 0
         mana_percintile = self.mana_points/self.max_mp if self.max_mp > 1 else 0
         stamina_percintile = self.stamina/self.max_stamina if self.max_stamina > 1 else 0
         return hp_percintile, mana_percintile, stamina_percintile
@@ -113,3 +113,15 @@ class Stats:
             "Crit": self.critical_chance
         } 
         return dict
+    
+    def __eq__(self, other):
+        return isinstance(other, Stats) and self.__dict__ == other.__dict__
+    
+    def to_save_dict(self):
+        save_dict = self.__dict__.copy()
+        save_dict["scaling_pattern"] = 0
+        return save_dict
+    
+    def load_save_dict(self, save_dict):
+        self.__dict__ = save_dict
+        self.__dict__["scaling_pattern"] = scaling_pattern

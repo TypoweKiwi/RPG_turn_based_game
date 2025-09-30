@@ -29,3 +29,12 @@ class Temple:
         cost = self.recover_cost*len(players)
         if self.team.stash.wallet.try_payment(cost):
             self.recover_mana(players)
+    
+    def __eq__(self, other):
+        return isinstance(other, Temple) and self.__dict__ == other.__dict__
+    
+    def to_save_dict(self):
+        return {"recover_cost": self.recover_cost}
+    
+    def load_save_dict(self, save_dict):
+        self.recover_cost = save_dict["recover_cost"]

@@ -129,6 +129,7 @@ knife_throw_dict = { #TODO ignoring enemy armor in skill func, add to desc how m
 
 
 skill_list = [
+    basic_attack_dict,
     holy_smite_dict,
     heal_dict,
     prayer_dict,

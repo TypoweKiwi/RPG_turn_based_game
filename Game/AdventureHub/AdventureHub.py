@@ -6,8 +6,8 @@ from Game.Temple import Temple
 from Game.Tavern import Tavern
 
 class AdventureHub:
-    def __init__(self, players):
-        self.team = players
+    def __init__(self, team):
+        self.team = team
         self.n_completed_adventures = 0
         self.exit_flag = False
         self.shop = Shop(self.team)
@@ -135,3 +135,25 @@ class AdventureHub:
             {"name": "Exit to menu", "value": self.exit_hub}
         ]
         return choices
+    
+    def __eq__(self, other):
+        return isinstance(other, AdventureHub) and self.__dict__ == other.__dict__
+
+    def to_save_dict(self):
+        return {
+            "team": self.team.to_save_dict(),
+            "n_completed_adventures": self.n_completed_adventures,
+            "shop": self.shop.to_save_dict(),
+            "tavern": self.tavern.to_save_dict(),
+            "temple": self.temple.to_save_dict()
+        }
+    
+    def load_save_dict(self, save_dict):
+        self.team.load_save_dict(save_dict["team"])
+        self.n_completed_adventures = save_dict["n_completed_adventures"]
+        self.shop.load_save_dict(save_dict["shop"])
+        self.tavern.load_save_dict(save_dict["tavern"])
+        self.temple.load_save_dict(save_dict["temple"])
+
+        
+        

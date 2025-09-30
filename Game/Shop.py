@@ -1,4 +1,5 @@
 from PlayerClasses.Inventory.item_generator import Item_generator
+from PlayerClasses.Inventory.Item import Item
 from Game.UI.Choices_func import show_message
 
 class Shop:
@@ -46,3 +47,20 @@ class Shop:
         upgrade_cost = upgraded_item_price*0.5
         if self.team.stash.wallet.try_payment(upgrade_cost):
             item.upgrade()
+    
+    def __eq__(self, other):
+        return isinstance(other, Shop) and self.__dict__ == other.__dict__
+    
+    def to_save_dict(self):
+        return {
+            "stock": [item.to_save_dict() for item in self.stock],
+            "refresh_price": self.refresh_price
+        }
+    
+    def load_save_dict(self, save_dict):
+        self.stock = []
+        for item_save_dict in save_dict["stock"]:
+            item = Item(item_stats_dict={})
+            item.load_save_dict(item_save_dict)
+            self.stock.append(item)
+        self.refresh_price = save_dict["refresh_price"]
