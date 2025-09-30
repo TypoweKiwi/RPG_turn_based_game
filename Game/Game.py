@@ -64,7 +64,6 @@ class Game:
         self.adventure_hub = AdventureHub(team=team)
         self.state = Game_state.running
         self.unlock_menu_options()
-        print(self.adventure_hub.__dict__)
     
     def save_game_state(self): 
         save_name = "Team." + self.adventure_hub.team.name + "." + datetime.datetime.now().strftime('%d-%m-%Y_%H-%M-%S') + ".txt"

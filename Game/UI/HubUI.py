@@ -1,12 +1,10 @@
-from rich.console import Console
 from Game.UI.Choices_func import make_query, show_message
-from rich.columns import Columns
+from Game.UI.UI import UI
 from rich.panel import Panel
-from Game.UI.CombatUI import CombatUI
 
-class HubUI(CombatUI):
+class HubUI(UI):
     def __init__(self, players, shop):
-        super().__init__(players, enemies=None)
+        super().__init__(players)
         self.shop = shop
 
     def map_preset_comparission(self):
