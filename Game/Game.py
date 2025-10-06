@@ -66,7 +66,7 @@ class Game:
         self.unlock_menu_options()
     
     def save_game_state(self): 
-        save_name = "Team." + self.adventure_hub.team.name + "." + datetime.datetime.now().strftime('%d-%m-%Y_%H-%M-%S') + ".txt"
+        save_name = "Team." + self.adventure_hub.team.name + "." + datetime.datetime.now().strftime('%d-%m-%Y_%H-%M-%S') + ".save"
         save_name = os.path.join(self.save_path, save_name)
         save_dict = self.adventure_hub.to_save_dict()
         with open(save_name, "w") as file:
@@ -77,7 +77,7 @@ class Game:
         def return_save_name(save_name):
             save_parts = save_name.split(".")
             return "Team: " + save_parts[1] + " Date: " + save_parts[2]
-        saves_lst = [{"name": return_save_name(save), "value": save} for save in os.listdir(self.save_path) if save.endswith(".txt")]
+        saves_lst = [{"name": return_save_name(save), "value": save} for save in os.listdir(self.save_path) if save.endswith(".save")]
         saves_lst.append({"name": "Back", "value": None})
         choice = make_query(message="Which save you wish to load?", choices=saves_lst)
         if choice:
